@@ -3,13 +3,17 @@ define ssh::user {
     $gecos = $name['gecos']
     $group = $name['group']
     $shell = $name['shell']
+    $uid = $name['uid']
+    $gid = $name['gid']
 
     group { $username:
         ensure => present,
+        gid => $gid,
     }
 
     user { $username:
         ensure => present,
+        uid => $uid,
         groups => $group,
         shell => "/bin/bash",
         comment => $gecos,
