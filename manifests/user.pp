@@ -1,11 +1,12 @@
 define ssh::user {
     $username = $name['name']
     $gecos = $name['gecos']
-    $group = $name['group']
+    $additional_groups = $name['additional_groups']
     $shell = $name['shell']
     $uid = $name['uid']
     $gid = $name['gid']
 
+    # Create a usergroup
     group { $username:
         ensure => present,
         gid => $gid,
@@ -14,12 +15,13 @@ define ssh::user {
     user { $username:
         ensure => present,
         uid => $uid,
-        groups => $group,
+        gid => $gid,
+        groups => $additional_groups,
         shell => "/bin/bash",
         comment => $gecos,
         managehome => yes,
         require => [
-            Group[$group],
+            Group[$additional_groups],
             Group[$username]
         ],
 

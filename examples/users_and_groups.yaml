@@ -6,10 +6,10 @@ ssh_groups: - name: foobar
 ssh_users:
  - name: "psc"
    gecos: "Patrick Schoenfeld"
-   group: "credativ"
+   additional_groups: ["credativ"]
    shell: "/bin/zsh"
-   gid: 2002
-   uid: 2002
+   gid: 2003
+   uid: 2003
    pwhash: "$5$g2ShvVtSoNiISzpI$w9gHo1vtH1uIS1diJTnCDNr4oFPjtHvPqjsFN6T8jWC"
    ssh_key: 
     type: "ssh-rsa"
