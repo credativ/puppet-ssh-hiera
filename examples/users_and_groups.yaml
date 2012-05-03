@@ -1,11 +1,15 @@
-ssh_groups: - foobar
-            - credativ
+ssh_groups: - name: foobar
+              gid: 2001
+            - name: credativ
+              gid: 2002
 
 ssh_users:
  - name: "psc"
    gecos: "Patrick Schoenfeld"
    group: "credativ"
    shell: "/bin/zsh"
+   gid: 2002
+   uid: 2002
    pwhash: "$5$g2ShvVtSoNiISzpI$w9gHo1vtH1uIS1diJTnCDNr4oFPjtHvPqjsFN6T8jWC"
    ssh_key: 
     type: "ssh-rsa"
