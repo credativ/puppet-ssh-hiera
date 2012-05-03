@@ -4,7 +4,7 @@ class ssh::users {
     $users = hiera('ssh_users')
 
     # Create groups and users defined in hiera
-    group { $groups: }
+    ssh::group { $groups: }
     ssh::user { $users: }
 }
 
