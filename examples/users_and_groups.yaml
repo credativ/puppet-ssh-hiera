@@ -1,0 +1,6 @@
+ssh_groups: - foobar
+            - credativ
+
+ssh_users:
+ - { name: "psc", gecos: "Patrick Schoenfeld", group: "credativ", shell: "/bin/zsh", pwhash: "$5$g2ShvVtSoNiISzpI$w9gHo1vtH1uIS1diJTnCDNr4oFPjtHvPqjsFN6T8jWC" ssh_key: {type: "ssh-rsa", key: "AAAAB3NzaC1yc2EAAAABIwAAAQEAqnrrjV9ge602ChzGnhNCJDWKp1rI0Zwb64yr8evY5ozINNzyHaWGwp20JRQbPmwhd3TQDPI3hQ48n8fTagCGKRUnim25A9Fmx25viXDA7VjmfmJvC11zZgP+7cGploLcU3aOKABOpNu38tOqcI2oUgyJ9b/H7/re/QT6HutOeLuoKUtctEflWWpYmpYfXlSFrvCmrI11cVLAA6ORuV7HaWitUe6e85bv+Wxu7RICUf4HNjZRJaZdDZkaR55Y+C147qc9VcCJuJFQbOjdhocxr9AJX0ECSeW5aooB3MOvefuCxXSlCgtQTczJhJiXUo97W+/SqzupB57Ju+jnK2XwbQ==", comment: "psc@lisa"}}
+
