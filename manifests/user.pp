@@ -19,7 +19,8 @@ define ssh::user {
         groups => $additional_groups,
         shell => "/bin/bash",
         comment => $gecos,
-        managehome => yes,
+        managehome => true,
+        home => "/home/${username}",
         require => [
             Group[$additional_groups],
             Group[$username]
