@@ -1,11 +1,4 @@
-define ssh::user {
-    $username = $name['name']
-    $gecos = $name['gecos']
-    $additional_groups = $name['additional_groups']
-    $shell = $name['shell']
-    $uid = $name['uid']
-    $gid = $name['gid']
-
+define ssh::user($username=$title, $uid, $gid, $gecos, $additional_groups, $shell="/bin/bash", $pwhash='', $ssh_key) {
     # Create a usergroup
     group { $username:
         ensure => present,
@@ -17,7 +10,7 @@ define ssh::user {
         uid => $uid,
         gid => $gid,
         groups => $additional_groups,
-        shell => "/bin/bash",
+        shell => $shell,
         comment => $gecos,
         managehome => true,
         home => "/home/${username}",
@@ -28,14 +21,9 @@ define ssh::user {
 
     }
 
-    # Set shell if available
-    if "shell" in $name {
-        User <| title == "$username" |> { shell => $name["shell"] }
-    }
-
     # Set password if available
-    if "pwhash" in $name {
-        User <| title == "$username" |> { password => $name["pwhash"] }
+    if $pwhash != '' {
+        User <| title == "$username" |> { password => $pwhash }
     }
 
     file { "/home/${username}/.ssh":
@@ -45,9 +33,7 @@ define ssh::user {
         mode => '0700',
     }
 
-    if "ssh_key" in $name {
-        $ssh_key = $name['ssh_key']
-
+    if $ssh_key {
         ssh_authorized_key { $ssh_key["comment"]:
              ensure => present,
              user => $username,

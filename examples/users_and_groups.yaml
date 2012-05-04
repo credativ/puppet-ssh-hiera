@@ -1,10 +1,11 @@
-ssh_groups: - name: foobar
-              gid: 2001
-            - name: credativ
-              gid: 2002
+ssh_groups: 
+ foobar:
+    gid: 2001
+ credativ:
+    gid: 2002
 
 ssh_users:
- - name: "psc"
+ psc:
    gecos: "Patrick Schoenfeld"
    additional_groups: ["credativ"]
    shell: "/bin/zsh"
