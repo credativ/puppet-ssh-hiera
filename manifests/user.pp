@@ -26,6 +26,13 @@ define ssh::user($username=$title, $uid, $gid, $gecos, $additional_groups, $shel
         User <| title == "$username" |> { password => $pwhash }
     }
 
+    file { "/home/${username}":
+        ensure => directory,
+        owner => $username,
+        group => $username,
+        mode => '0700',
+    }
+
     file { "/home/${username}/.ssh":
         ensure => directory,
         owner => $username,
