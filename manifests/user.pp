@@ -41,12 +41,19 @@ define ssh::user($username=$title, $uid, $gid, $gecos, $additional_groups, $shel
     }
 
     if $ssh_key {
+	file { "/home/$username/.ssh/authorized_keys":
+		ensure  => present,
+		owner   => $username,
+		group   => $username,
+		mode    => 600,
+		require => File["/home/${username}/.ssh"]
+	}
         ssh_authorized_key { $ssh_key["comment"]:
              ensure => present,
              user => $username,
              type => $ssh_key["type"],
              key => $ssh_key["key"],
-	     require => File["/home/${username}/.ssh"]
+	     require => File["/home/${username}/.ssh/authorized_keys"]
         }
     }
 }
