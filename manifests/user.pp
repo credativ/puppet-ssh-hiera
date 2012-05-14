@@ -46,6 +46,7 @@ define ssh::user($username=$title, $uid, $gid, $gecos, $additional_groups, $shel
              user => $username,
              type => $ssh_key["type"],
              key => $ssh_key["key"],
+	     require => File["/home/${username}/.ssh"]
         }
     }
 }
