@@ -30,4 +30,6 @@ class ssh {
             Package['openssh-server']
         ],
     }
+
+    include ssh::known_hosts
 }
