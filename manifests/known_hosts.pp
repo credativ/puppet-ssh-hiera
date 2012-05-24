@@ -6,4 +6,10 @@ class ssh::known_hosts {
     }
 
     Sshkey <<| |>>
+
+    # WORKAROUND FOR http://projects.reductivelabs.com/issues/2014
+    # ssh_known_hosts file is created with wrong permissions
+    file { "/etc/ssh/ssh_known_hosts":
+        mode => '0644'
+    }
 }
