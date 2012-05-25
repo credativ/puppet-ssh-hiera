@@ -1,7 +1,7 @@
-define ssh::group ($groupname=$title, $gid) {
+define ssh::group ($gid, $groupname=$title) {
     group { $groupname:
-        ensure => present,
-        gid => $gid
+        ensure  => present,
+        gid     => $gid
     }
 
 }
