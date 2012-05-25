@@ -1,7 +1,10 @@
-define ssh::group ($groupname=$title, $gid) {
-    group { $groupname:
-        ensure => present,
-        gid => $gid
-    }
+define puppet-ssh-hiera::group (
+  $gid,
+  $groupname = $title
+) {
 
+  group { $groupname:
+    ensure => present,
+    gid    => $gid,
+  }
 }
