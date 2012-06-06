@@ -4,23 +4,27 @@
 #
 # == Actions:
 #
-# Installs openssh-server and makes sure PermitRootLogin is set to whatever
-# is configured in the hiera backend.
-#
-# Apart from that it includes ssh::known_hosts to import all hostkeys
-# from the storeconfig database to its local /etc/ssh/ssh_known_hosts
+# Manage SSH on a system, including distributing hostkeys.
 #
 # == Requirements:
 #
-#    - augeas
-#    - hiera
-#    - storeconfig backend configured on puppetmaster
+#    - params_lookup function from example42lib
 
-class ssh {
-    $permit_root_login = hiera('permit_root_login')
+class ssh (
+    $ensure             = params_lookup('ensure'),
+    $ensure_running     = params_lookup('ensure_running'),
+    $ensure_enabled     = params_lookup('ensure_enabled'),
+    $permit_root_login  = params_lookup('permit_root_login', 'global'),
+    $manage_known_hosts = params_lookup('manage_known_hosts'),
+    $manage_users       = params_lookup('manage_users'),
+    $manage_groups      = params_lookup('manage_groups'),
+    $users              = params_lookup('users'),
+    $groups             = params_lookup('groups')
+
+    ) inherits ssh::params {
 
     package { 'openssh-server':
-        ensure => present
+        ensure => $ensure,
     }
 
     file { '/etc/ssh/sshd_config':
@@ -39,8 +43,8 @@ class ssh {
     }
 
     service { 'ssh':
-        ensure      => running,
-        enable      => true,
+        ensure      => $ensure_running,
+        enable      => $ensure_enabled,
         hasrestart  => true,
         hasstatus   => true,
         require     => [
@@ -49,5 +53,17 @@ class ssh {
         ],
     }
 
-    include ssh::known_hosts
+    class { 'ssh::groups':
+        manage => $manage_groups,
+        groups => $groups,
+    }
+
+    class { 'ssh::users':
+        manage => $manage_users,
+        users  => $users,
+    }
+
+    class { 'ssh::known_hosts':
+        manage => $manage_known_hosts,
+    }
 }

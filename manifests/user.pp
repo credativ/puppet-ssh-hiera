@@ -54,7 +54,7 @@ define ssh::user($ssh_key, $uid, $gid, $gecos, $additional_groups,
         ssh_authorized_key { $ssh_key['comment']:
             ensure  => present,
             user    => $username,
-            type    => $ssh_key['type']
+            type    => $ssh_key['type'],
             key     => $ssh_key['key'],
             require => File["/home/${username}/.ssh/authorized_keys"]
         }
