@@ -15,6 +15,7 @@ class ssh (
     $ensure_running     = params_lookup('ensure_running'),
     $ensure_enabled     = params_lookup('ensure_enabled'),
     $permit_root_login  = params_lookup('permit_root_login', 'global'),
+    $listen_address     = params_lookup('listen_address'),
     $manage_known_hosts = params_lookup('manage_known_hosts'),
     $manage_users       = params_lookup('manage_users'),
     $manage_groups      = params_lookup('manage_groups'),
@@ -39,6 +40,7 @@ class ssh (
         context => '/files/etc/ssh/sshd_config',
         changes => [
             "set PermitRootLogin $permit_root_login",
+            "set ListenAddress $listen_address"
         ],
     }
 
