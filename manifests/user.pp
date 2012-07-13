@@ -4,6 +4,7 @@ define ssh::user(
     $gecos,
     $additional_groups,
     $ssh_key='',
+    $ssh_keys={},
     $shell='bin/bash',
     $pwhash='',
     $username=$title
@@ -50,21 +51,29 @@ define ssh::user(
         mode    => '0700',
     }
 
-    if $ssh_key {
-        file { "/home/$username/.ssh/authorized_keys":
-            ensure  => present,
-            owner   => $username,
-            group   => $username,
-            mode    => '0600',
-            require => File["/home/${username}/.ssh"]
-        }
+    file { "/home/$username/.ssh/authorized_keys":
+	ensure	    => present,
+	owner	    => $username,
+	group	    => $username,
+	mode	    => '0600',
+	require	    => File["/home/${username}/.ssh"]
+	refreshonly => true,
+    }
 
+    Ssh_authorized_key {
+	require	=>  File["/home/${username}/.ssh/authorized_keys"]
+    }
+
+    if $ssh_key {
         ssh_authorized_key { $ssh_key['comment']:
             ensure  => present,
             user    => $username,
             type    => $ssh_key['type'],
             key     => $ssh_key['key'],
-            require => File["/home/${username}/.ssh/authorized_keys"]
         }
+    }
+
+    if $ssh_keys {
+	create_resources("ssh_authorized_key", $ssh_keys)
     }
 }
