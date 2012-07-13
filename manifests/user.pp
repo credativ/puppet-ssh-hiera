@@ -1,5 +1,13 @@
-define ssh::user($ssh_key='', $uid, $gid, $gecos, $additional_groups,
-    $shell='bin/bash', $pwhash='', $username=$title) {
+define ssh::user(
+    $uid,
+    $gid,
+    $gecos,
+    $additional_groups,
+    $ssh_key='',
+    $shell='bin/bash',
+    $pwhash='',
+    $username=$title
+    ) {
 
     # Create a usergroup
     group { $username:
