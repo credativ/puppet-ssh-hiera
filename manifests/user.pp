@@ -56,7 +56,7 @@ define ssh::user(
 	owner	    => $username,
 	group	    => $username,
 	mode	    => '0600',
-	require	    => File["/home/${username}/.ssh"]
+	require	    => File["/home/${username}/.ssh"],
 	refreshonly => true,
     }
 
