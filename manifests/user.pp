@@ -52,16 +52,21 @@ define ssh::user(
     }
 
     file { "/home/$username/.ssh/authorized_keys":
-	ensure	    => present,
-	owner	    => $username,
-	group	    => $username,
-	mode	    => '0600',
-	require	    => File["/home/${username}/.ssh"],
-	refreshonly => true,
+        ensure  => present,
+        owner   => $username,
+        group   => $username,
+        mode    => '0600',
+        require => File["/home/${username}/.ssh"],
     }
 
     Ssh_authorized_key {
-	require	=>  File["/home/${username}/.ssh/authorized_keys"]
+        require =>  File["/home/${username}/.ssh/authorized_keys"]
+    }
+
+    $ssh_key_defaults = {
+        ensure  => present,
+        user    => $username,
+        type    => 'ssh-rsa'
     }
 
     if $ssh_key {
@@ -74,6 +79,6 @@ define ssh::user(
     }
 
     if $ssh_keys {
-	create_resources("ssh_authorized_key", $ssh_keys)
+        create_resources("ssh_authorized_key", $ssh_keys, $ssh_key_defaults)
     }
 }
