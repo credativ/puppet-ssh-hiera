@@ -7,7 +7,8 @@ define ssh::user(
     $ssh_keys={},
     $shell='bin/bash',
     $pwhash='',
-    $username=$title
+    $username=$title,
+    $home=undef,
     ) {
 
     # Create a usergroup
@@ -24,7 +25,6 @@ define ssh::user(
         shell       => $shell,
         comment     => $gecos,
         managehome  => true,
-        home        => "/home/${username}",
         require     => [
             Group[$additional_groups],
             Group[$username]
@@ -35,6 +35,13 @@ define ssh::user(
     # Set password if available
     if $pwhash != '' {
         User <| title == $username |> { password => $pwhash }
+    }
+
+    # Set homedir if available
+    if $home {
+        User <| title == $username |> { home => $home }
+    } else {
+        User <| title == $username |> { home => "/home/${username}" }
     }
 
     file { "/home/${username}":
