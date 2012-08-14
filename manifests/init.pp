@@ -2,14 +2,64 @@
 #
 # Manage SSH on a system
 #
-# == Actions:
-#
-# Manage SSH on a system, including distributing hostkeys.
+# == Features:
+# 
+# - Install sshd and configure some common settings (e.g. PermitRootLogin)
+# - Manage ssh users and groups
+# - Manage a global known_hosts file
 #
 # == Requirements:
+# 
+#  - This module makes use of the example42 functions in the puppi module
+#    (https://github.com/credativ/puppet-example42lib)
+#  - The module makes use of puppets storeconfig feature. So puppet on both
+#    master and agents must be configured accordingly.
 #
-#    - params_lookup function from example42lib
-
+# == Parameters:
+# 
+# [*ensure*]
+#    What state to ensure for the package. Accepts the same values
+#    as the parameter of the same name for a package type.
+#    Default: present
+#
+#  [*ensure_running*]
+#    Weither to ensure running keepalived or not.
+#    Default: running
+#
+#  [*ensure_enabled*]
+#    Weither to ensure that keepalived is started on boot or not.
+#    Default: true
+#
+# [*manage_known_hosts*]
+#    Weither to manage a global known_hosts file or not.
+#    Default: ture
+#
+# [*manage_users*]
+#    Weither to manage users or not.
+#    Default: true
+#
+# [*manage_groups*]
+#    Weither to manage groups or not.
+#
+# [*permit_root_login*]
+#    Weither to permit root login or not. This is a global option. If
+#    configuring it from hiera, make sure not to prefix it with the
+#    module name.
+#
+# [*listen_address*]
+#    Define the address the sshd should listen on.
+#    Default: 0.0.0.0
+#
+# [*users]
+#    A hash with the users that shall be managed.
+#
+# [*groups*]
+#    A hash with the groups that shall be managed
+#
+# == Author:
+# 
+#    Patrick Schoenfeld <patrick.schoenfeld@credativ.de>
+#
 class ssh (
     $ensure             = params_lookup('ensure'),
     $ensure_running     = params_lookup('ensure_running'),
