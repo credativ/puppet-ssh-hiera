@@ -74,6 +74,8 @@ class ssh (
 
     ) inherits ssh::params {
 
+    include augeas
+
     package { 'openssh-server':
         ensure => $ensure,
     }
