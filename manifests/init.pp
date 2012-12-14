@@ -78,8 +78,8 @@ class ssh (
         ensure => $ensure,
     }
 
-    package { 'augeas-tools':
-        ensure => 'present',
+    package augeas-tools { "libaugeas0","libaugeas-ruby","augeas-tools" :
+      ensure => 'installed'
     }
 
     file { '/etc/ssh/sshd_config':
