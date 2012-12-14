@@ -74,12 +74,10 @@ class ssh (
 
     ) inherits ssh::params {
 
+    include augeas
+
     package { 'openssh-server':
         ensure => $ensure,
-    }
-
-    package augeas-tools { "libaugeas0","libaugeas-ruby","augeas-tools" :
-      ensure => 'installed'
     }
 
     file { '/etc/ssh/sshd_config':
@@ -96,7 +94,6 @@ class ssh (
             "set PermitRootLogin $permit_root_login",
             "set ListenAddress $listen_address"
         ],
-        require => Package['augeas-tools'],
     }
 
     service { 'ssh':
