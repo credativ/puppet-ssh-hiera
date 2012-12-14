@@ -78,6 +78,10 @@ class ssh (
         ensure => $ensure,
     }
 
+    package { 'augeas-tools':
+        ensure => 'present',
+    }
+
     file { '/etc/ssh/sshd_config':
         owner   => root,
         group   => root,
@@ -92,6 +96,7 @@ class ssh (
             "set PermitRootLogin $permit_root_login",
             "set ListenAddress $listen_address"
         ],
+        require => Package['augeas-tools'],
     }
 
     service { 'ssh':
