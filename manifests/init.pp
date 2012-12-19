@@ -56,6 +56,15 @@
 # [*groups*]
 #    A hash with the groups that shall be managed
 #
+# [*local_users]
+#    A hash with the users that shall be managed, additional to the ones
+#    specified in the users hash.
+#
+# [*local_groups*]
+#    A hash with the groups that shall be managed, additional to the ones
+#    specified in the users hash.
+
+#
 # == Author:
 # 
 #    Patrick Schoenfeld <patrick.schoenfeld@credativ.de>
@@ -70,7 +79,9 @@ class ssh (
     $manage_users       = params_lookup('manage_users'),
     $manage_groups      = params_lookup('manage_groups'),
     $users              = params_lookup('users'),
-    $groups             = params_lookup('groups')
+    $local_users        = params_lookup('local_users'),
+    $groups             = params_lookup('groups'),
+    $local_groups       = params_lookup('local_groups'),
 
     ) inherits ssh::params {
 
@@ -107,12 +118,12 @@ class ssh (
 
     class { 'ssh::groups':
         manage => $manage_groups,
-        groups => $groups,
+        groups => [ $groups, $local_groups ],
     }
 
     class { 'ssh::users':
         manage => $manage_users,
-        users  => $users,
+        users  => [ $users, $local_users ],
     }
 
     class { 'ssh::known_hosts':
