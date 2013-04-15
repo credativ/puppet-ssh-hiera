@@ -1,6 +1,6 @@
 # Puppet module: ssh
 
-This is a puppet module for sshd based on the common credativ puppet modules
+This is a puppet module for `openssh-server` based on the common credativ puppet modules
 layout ((https://github.com/credativ/puppet-module-template)
 
 ## Install
@@ -18,7 +18,7 @@ So including it via the following line of code or in a ENC declaration
 (apart from proper configuration in hiera or top-scope variables)
 is usually enough:
 
-class { 'ssh': }
+     class { 'ssh': }
 
 This module does not create a configuration file itself, but it is able
 to manage a few common settings.
@@ -37,8 +37,8 @@ To change it, having something like this in hiera works:
 
 in `common.yaml` (depends on your `hiera.yaml` config)
 
-  permit_root_login: 'yes'
+    permit_root_login: 'yes'
   
 or 
 
-  ssh_permit_root_login: 'yes'
+    ssh_permit_root_login: 'yes'
