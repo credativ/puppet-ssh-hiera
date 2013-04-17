@@ -1,14 +1,26 @@
 define ssh::user(
     $uid,
     $gid,
-    $gecos,
-    $additional_groups,
+    $comment,
+    $groups,
     $ssh_key='',
     $ssh_keys={},
     $shell='bin/bash',
     $pwhash='',
-    $username=$title
+    $username=$title,
+    $managehome=true,
+    $home=''
     ) {
+      
+    if $managehome == true {
+        User <| title == $username |> { managehome => true }
+        User <| title == $username |> { home => "/home/${username}" }
+    }
+    
+    # custom home location
+    if $home != '' {
+        User <| title == $username |> { managehome => true }
+    }
 
     # Create a usergroup
     group { $username:
@@ -20,13 +32,11 @@ define ssh::user(
         ensure      => present,
         uid         => $uid,
         gid         => $gid,
-        groups      => $additional_groups,
+        groups      => $groups,
         shell       => $shell,
-        comment     => $gecos,
-        managehome  => true,
-        home        => "/home/${username}",
+        comment     => $comment,
         require     => [
-            Group[$additional_groups],
+            Group[$groups],
             Group[$username]
         ],
 
