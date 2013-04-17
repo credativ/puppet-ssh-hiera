@@ -14,6 +14,18 @@ if you are using puppet-librarian, simply add:
 Most common use case for the module is to just include it and configure it
 in the hiera backend.
 
+    johndoe:
+     comment: "John Doe"
+     groups: ["sudo"]
+     shell: "/bin/bash"
+     pwhash: '$6$wVWsmNcN$t4G3kuGyWvdtQ.X51jZGPdSZaB.5wA/6F7qzyJ4CaUmasZZA94v2qw9vZueyXRSeRBWmHxCKBdiLIK35lyK3y0'
+     uid: 1002
+     gid: 1002
+     ssh_key:
+      type: "ssh-rsa"
+      comment: "john@pc"
+      key: "AAAAB3NzaC1yc2EAAAADAQABAAABAQDIRsDur48bb8kTvrtg9uSzu722964xQ+4Pnu...
+
 So including it via the following line of code or in a ENC declaration
 (apart from proper configuration in hiera or top-scope variables)
 is usually enough:
@@ -27,7 +39,7 @@ to manage a few common settings.
 
 Often systems may not want to permit root login via SSH. This module is
 able to set this option via augeas. The parameter is a global parameter
-called 'permit_root_login', so it always has the same name (contrary
+called `permit_root_login`, so it always has the same name (contrary
 to other parameters, which are usually prefixed with the module name if
 configured via global parameters or hiera).
 
