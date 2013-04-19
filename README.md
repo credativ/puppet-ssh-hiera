@@ -1,7 +1,7 @@
 # Puppet module: ssh
 
 This is a puppet module for `openssh-server` based on the common credativ puppet modules
-layout ((https://github.com/credativ/puppet-module-template)
+layout (https://github.com/credativ/puppet-module-template)
 
 ## Requirements
 This module template requires the params_lookup function as found in the
@@ -71,7 +71,7 @@ To change it, having something like this in hiera works:
 in `common.yaml` (depends on your `hiera.yaml` config)
 
     permit_root_login: 'yes'
-  
+
 or 
 
     ssh_permit_root_login: 'yes'
