@@ -18,26 +18,43 @@ if you are using librarian or r10k, simply add the following line into your Pupp
 Most common use case for the module is to just include it and configure it
 in the hiera backend.
 
-    johndoe:
-     comment: "John Doe"
-     groups: ["sudo"]
-     shell: "/bin/bash"
-     pwhash: '$6$wVWsmNcN$t4G3kuGyWvdtQ.X51jZGPdSZaB.5wA/6F7qzyJ4CaUmasZZA94v2qw9vZueyXRSeRBWmHxCKBdiLIK35lyK3y0'
-     uid: 1002
-     gid: 1002
-     ssh_key:
-      type: "ssh-rsa"
-      comment: "john@pc"
-      key: "AAAAB3NzaC1yc2EAAAADAQABAAABAQDIRsDur48bb8kTvrtg9uSzu722964xQ+4Pnu...
+    ssh_groups:
+      www-data:
+        gid: 33
+    ssh_users:
+      johndoe:
+        comment: "John Doe"
+        groups: ["sudo"]
+        shell: "/bin/bash"
+        pwhash: '$6$wVWsmNcN$t4G3kuGyWvdtQ.X51jZGPdSZaB.5wA/6F7qzyJ4CaUmasZZA94v2qw9vZueyXRSeRBWmHxCKBdiLIK35lyK3y0'
+        uid: 1002
+        gid: 1002
+        ssh_key:
+          type: "ssh-rsa"
+          comment: "john@pc"
+          key: "AAAAB3NzaC1yc2EAAAADAQABAAABAQDIRsDur48bb8kTvrtg9uSzu722964xQ+4Pnu...
 
 So including it via the following line of code or in a ENC declaration
 (apart from proper configuration in hiera or top-scope variables)
 is usually enough:
 
-     class { 'ssh': }
+      class { 'ssh': }
 
-This module does not create a configuration file itself, but it is able
-to manage a few common settings.
+This module does not create a configuration file itself, but it is able to manage a few common settings.
+
+Suppose your `hiera.yaml` looks like this:
+
+      ---
+      :hierarchy:
+          - %{operatingsystem}
+          - common
+      :backends:
+          - yaml
+      :yaml:
+          :datadir: /etc/puppet/hieradata/%{::environment}
+
+Then hiera using `hiera_hash` will search for all `ssh_users` variables in all relevant files. So that you can define `debian_admin` user specific for Debian servers in `Debian.yaml` and all default user accounts will be in `common.yaml`.
+
 
 ### Configuring PermitRootLogin
 
