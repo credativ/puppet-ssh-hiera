@@ -11,8 +11,9 @@ define ssh::user(
     $managehome=true,
     $home=''
     ) {
+
       
-    if $managehome == true && $home == '' {
+    if ($managehome == true) and ($home == '') {
         User <| title == $username |> { managehome => true }
         User <| title == $username |> { home => "/home/${username}" }
     }
