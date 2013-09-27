@@ -70,7 +70,8 @@ class ssh (
     $manage_users       = params_lookup('manage_users'),
     $manage_groups      = params_lookup('manage_groups'),
     $users              = params_lookup('users'),
-    $groups             = params_lookup('groups')
+    $groups             = params_lookup('groups'),
+    $service_name       = params_lookup('service_name')
 
     ) inherits ssh::params {
 
@@ -82,7 +83,7 @@ class ssh (
         owner   => root,
         group   => root,
         mode    => '0644',
-        notify  => Service['ssh'],
+        notify  => Service[$service_name],
         require => Package['openssh-server'],
     }
 
@@ -94,7 +95,7 @@ class ssh (
         ],
     }
 
-    service { 'ssh':
+    service { $service_name:
         ensure      => $ensure_running,
         enable      => $ensure_enabled,
         hasrestart  => true,
