@@ -1,7 +1,7 @@
 define ssh::user(
     $uid,
     $gid,
-    $comment,
+    $gecos,
     $groups,
     $ssh_key='',
     $ssh_keys={},
@@ -34,7 +34,7 @@ define ssh::user(
         gid         => $gid,
         groups      => $groups,
         shell       => $shell,
-        comment     => $comment,
+        gecos       => $comment,
         require     => [
             Group[$groups],
             Group[$username]
