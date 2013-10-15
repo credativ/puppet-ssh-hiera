@@ -5,7 +5,7 @@ class ssh::params {
     $manage_known_hosts = true
     $manage_users       = true
     $manage_groups      = true
-    $permit_root_login  = false
+    $permit_root_login  = 'no'
     $listen_address     = "0.0.0.0"
 
     $users              = undef
