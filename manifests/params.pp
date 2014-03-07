@@ -11,4 +11,16 @@ class ssh::params {
     $users              = undef
     $groups             = undef
 
+    case $::osfamily {
+        'Debian': {
+            $service_name = 'ssh'
+        }
+        'RedHat': {
+            $service_name = 'sshd'
+        }
+        default: {
+            fail('unsupported platform')
+        }
+    }
+
 }
