@@ -99,7 +99,6 @@ set <%= k %> <%= v %>
 <% end -%>
 ")
 
-
     augeas { 'sshd_config':
         context => '/files/etc/ssh/sshd_config',
         changes => $additional_ssh_options
