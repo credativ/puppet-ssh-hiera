@@ -8,8 +8,8 @@ class ssh::params {
     $permit_root_login  = 'no'
     $listen_address     = "0.0.0.0"
 
-    $users              = undef
-    $groups             = undef
+    $users              = {}
+    $groups             = {}
 
     case $::osfamily {
         'Debian': {
