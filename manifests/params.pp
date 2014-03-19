@@ -11,6 +11,8 @@ class ssh::params {
     $users              = {}
     $groups             = {}
 
+    $options            = {}
+
     case $::osfamily {
         'Debian': {
             $service_name = 'ssh'

@@ -73,6 +73,7 @@ class ssh (
     $users              = params_lookup('users'),
     $groups             = params_lookup('groups'),
     $service_name       = params_lookup('service_name')
+    $options            = params_lookup('options')
 
     ) inherits ssh::params {
 
@@ -94,6 +95,11 @@ class ssh (
             "set PermitRootLogin $permit_root_login",
             "set ListenAddress $listen_address"
         ],
+        inline_template("
+<% options.each do |k, v| -%>
+set <%= k %> <%= val %>
+<% end -%>
+)
     }
 
     service { $service_name:
