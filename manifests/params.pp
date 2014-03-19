@@ -3,8 +3,8 @@ class ssh::params {
     $ensure_running     = true
     $ensure_enabled     = true
     $manage_known_hosts = true
-    $manage_users       = true
-    $manage_groups      = true
+    $manage_users       = false
+    $manage_groups      = false
     $permit_root_login  = 'no'
     $listen_address     = "0.0.0.0"
 
