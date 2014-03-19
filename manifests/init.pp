@@ -72,7 +72,7 @@ class ssh (
     $manage_groups      = params_lookup('manage_groups'),
     $users              = params_lookup('users'),
     $groups             = params_lookup('groups'),
-    $service_name       = params_lookup('service_name')
+    $service_name       = params_lookup('service_name'),
     $options            = params_lookup('options')
 
     ) inherits ssh::params {
@@ -91,15 +91,15 @@ class ssh (
 
     augeas { 'sshd_config':
         context => '/files/etc/ssh/sshd_config',
-        changes => [
+        changes => concat([
             "set PermitRootLogin $permit_root_login",
             "set ListenAddress $listen_address"
-        ],
+        ], 
         inline_template("
 <% options.each do |k, v| -%>
 set <%= k %> <%= val %>
 <% end -%>
-)
+"))
     }
 
     service { $service_name:
