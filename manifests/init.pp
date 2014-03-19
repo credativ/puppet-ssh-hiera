@@ -89,17 +89,22 @@ class ssh (
         require => Package['openssh-server'],
     }
 
+    $additional_ssh_options = inline_template("
+set PermitRootLogin $permit_root_login
+set ListenAddress $listen_address
+<% if @options -%>
+<% options.each do |k, v| -%>
+set <%= k %> <%= v %>
+<% end -%>
+<% end -%>
+")
+
+
     augeas { 'sshd_config':
         context => '/files/etc/ssh/sshd_config',
-        changes => concat([
-            "set PermitRootLogin $permit_root_login",
-            "set ListenAddress $listen_address"
-        ], 
-        inline_template("
-<% options.each do |k, v| -%>
-set <%= k %> <%= val %>
-<% end -%>
-"))
+        changes => $additional_ssh_options
+        #split('\n', $ssh_options))
+        
     }
 
     service { $service_name:
