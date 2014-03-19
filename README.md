@@ -3,6 +3,10 @@
 This is a puppet module for `openssh-server` based on the common credativ puppet modules
 layout ((https://github.com/credativ/puppet-module-template)
 
+## Requirements
+This module template requires the params_lookup function as found in the
+example42 puppi module (github.com/credativ/puppet-example42lib)
+
 ## Install
 
 if you are using puppet-librarian, simply add:
