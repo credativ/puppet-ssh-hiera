@@ -36,10 +36,11 @@
 #
 # [*manage_users*]
 #    Weither to manage users or not.
-#    Default: true
+#    Default: false
 #
 # [*manage_groups*]
 #    Weither to manage groups or not.
+#    Default: false
 #
 # [*permit_root_login*]
 #    Weither to permit root login or not. This is a global option. If
