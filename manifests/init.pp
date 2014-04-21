@@ -23,27 +23,27 @@
 #    Default: present
 #
 #  [*ensure_running*]
-#    Weither to ensure running keepalived or not.
+#    Wether to ensure running sshd or not.
 #    Default: running
 #
 #  [*ensure_enabled*]
-#    Weither to ensure that keepalived is started on boot or not.
+#    Wether to ensure that sshd is started on boot or not.
 #    Default: true
 #
 # [*manage_known_hosts*]
-#    Weither to manage a global known_hosts file or not.
-#    Default: ture
+#    Wether to manage a global known_hosts file or not.
+#    Default: true
 #
 # [*manage_users*]
-#    Weither to manage users or not.
+#    Wether to manage users or not.
 #    Default: false
 #
 # [*manage_groups*]
-#    Weither to manage groups or not.
+#    Wether to manage groups or not.
 #    Default: false
 #
 # [*permit_root_login*]
-#    Weither to permit root login or not. This is a global option. If
+#    Wether to permit root login or not. This is a global option. If
 #    configuring it from hiera, make sure not to prefix it with the
 #    module name.
 #
