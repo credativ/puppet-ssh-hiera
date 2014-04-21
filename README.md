@@ -9,9 +9,9 @@ example42 puppi module (github.com/credativ/puppet-example42lib)
 
 ## Install
 
-if you are using puppet-librarian, simply add:
+if you are using librarian or r10k, simply add the following line into your Puppetfile:
 
-    mod 'ssh', :git => 'git://github.com/credativ/puppet-ssh-hiera.git'
+    mod 'credativ/ssh', :git => 'git://github.com/credativ/puppet-ssh-hiera.git'
 
 ## Usage
 
