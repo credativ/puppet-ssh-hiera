@@ -1,0 +1,5 @@
+puppet-module-ssh (1.0.0) unstable; urgency=low
+
+  * Initial release.
+
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Tue, 20 May 2014 14:36:42 +0200

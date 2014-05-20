@@ -1,0 +1,10 @@
+manifests   etc/puppet/module/ssh
+templates   etc/puppet/module/ssh
+files       etc/puppet/module/ssh
+spec        etc/puppet/module/ssh
+Rakefile    etc/puppet/module/ssh
+Gemfile     etc/puppet/module/ssh
+LICENSE     usr/share/doc/puppet-module-ssh
+README*     usr/share/doc/puppet-module-ssh
+examples/*  usr/share/doc/puppet-module-ssh/examples
+
