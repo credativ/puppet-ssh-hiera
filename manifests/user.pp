@@ -2,9 +2,9 @@ define ssh::user(
     $uid,
     $gid,
     $comment,
-    $groups,
     $ssh_key='',
     $ssh_keys={},
+    $groups=undef,
     $shell='bin/bash',
     $pwhash='',
     $username=$title,
@@ -28,6 +28,10 @@ define ssh::user(
         gid     => $gid,
     }
 
+    if $groups {
+        User <| title = $username |> { groups => $groups }
+    }
+
     user { $username:
         ensure      => present,
         uid         => $uid,
@@ -36,7 +40,6 @@ define ssh::user(
         shell       => $shell,
         comment     => $comment,
         require     => [
-            Group[$groups],
             Group[$username]
         ],
 
