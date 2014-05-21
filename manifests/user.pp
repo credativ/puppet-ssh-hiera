@@ -28,8 +28,9 @@ define ssh::user(
         gid     => $gid,
     }
 
+    # handle optional group
     if $groups {
-        User <| title = $username |> { groups => $groups }
+        User <| title == $username |> { groups => $groups }
     }
 
     user { $username:
