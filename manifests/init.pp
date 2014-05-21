@@ -117,12 +117,10 @@ set <%= k %> <%= v %>
         ],
     }
 
-    Class['ssh::groups'] -> Class['ssh::users']
-
     class { 'ssh::groups':
         manage => $manage_groups,
         groups => $groups,
-    } 
+    } ~> # first groups, then users
     class { 'ssh::users':
         manage => $manage_users,
         users  => $users,

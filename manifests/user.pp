@@ -28,11 +28,6 @@ define ssh::user(
         gid     => $gid,
     }
 
-    # handle optional group
-    if $groups {
-        User <| title == $username |> { groups => $groups }
-    }
-
     user { $username:
         ensure      => present,
         uid         => $uid,
