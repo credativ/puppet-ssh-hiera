@@ -6,8 +6,8 @@ ssh_groups:
 
 ssh_users:
  psc:
-   gecos: "Patrick Schoenfeld"
-   additional_groups: ["credativ"]
+   comment: "Patrick Schoenfeld"
+   groups: ["credativ"]
    shell: "/bin/zsh"
    gid: 2003
    uid: 2003

@@ -11,8 +11,9 @@ define ssh::user(
     $managehome=true,
     $home=''
     ) {
+
       
-    if $managehome == true {
+    if ($managehome == true) and ($home == '') {
         User <| title == $username |> { managehome => true }
         User <| title == $username |> { home => "/home/${username}" }
     }
@@ -20,6 +21,7 @@ define ssh::user(
     # custom home location
     if $home != '' {
         User <| title == $username |> { managehome => true }
+        User <| title == $username |> { home => "${home}" }
     }
 
     # Create a usergroup
@@ -36,6 +38,7 @@ define ssh::user(
         shell       => $shell,
         comment     => $comment,
         require     => [
+            Group[$groups],
             Group[$username]
         ],
 
