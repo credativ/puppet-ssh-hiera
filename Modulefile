@@ -1,5 +1,5 @@
 name    'credativ/ssh'
-version '1.0.2'
+version '1.2.0'
 source 'https://github.com/credativ/puppet-ssh-hiera'
 author 'Patrick Schoenfeld <patrick.schoenfeld@credativ.de>'
 license 'MIT'
