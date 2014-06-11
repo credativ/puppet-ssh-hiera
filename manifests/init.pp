@@ -30,6 +30,12 @@
 #    Wether to ensure that sshd is started on boot or not.
 #    Default: true
 #
+# [*manage_hostkey*]
+#    Wether to manage the hostkey) or not. This is required for manage_known_hosts
+#    without storeconfig/puppetdb to work.
+#    Default: false
+
+#
 # [*manage_known_hosts*]
 #    Wether to manage a global known_hosts file or not.
 #    Default: true
@@ -128,7 +134,7 @@ set <%= k %> <%= v %>
     }
 
     class { 'ssh::hostkey':
-        manage  => $manage_hostkey,
+        manage_hostkey  => $manage_hostkey,
     }
     class { 'ssh::known_hosts':
         manage          => $manage_known_hosts,
