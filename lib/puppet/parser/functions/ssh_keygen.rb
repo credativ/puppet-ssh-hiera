@@ -19,10 +19,11 @@ module Puppet::Parser::Functions
     config = args.first
 
     config = {
-      'dir'    => 'ssh',
-      'type'   => 'rsa',
-      'size'   => 2048,
-      'public' => false,
+      'dir'     => 'ssh',
+      'type'    => 'rsa',
+      'size'    => 2048,
+      'public'  => false,
+      'comment' => '',
     }.merge(config)
 
     config['size'] = 1024 if config['type'] == 'dsa' and config['size'] > 1024
@@ -41,7 +42,7 @@ module Puppet::Parser::Functions
     # Do my keys exist? Well, keygen if they don't!
     begin
       unless File.exists?("#{fullpath}/#{config['name']}") then
-        %x[/usr/bin/ssh-keygen -t #{config['type']} -b #{config['size']} -P '' -f #{fullpath}/#{config['name']}]
+        %x[/usr/bin/ssh-keygen -v -N '' -C #{config['comment']} -f #{fullpath}/#{config['name']}]
       end
     rescue => e
       raise Puppet::ParseError, "ssh_keygen(): Unable to generate ssh key (#{e})"
