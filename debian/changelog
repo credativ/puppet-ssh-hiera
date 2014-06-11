@@ -1,6 +1,7 @@
 puppet-module-ssh (1.2.0) unstable; urgency=low
 
   * Bugfix in manage_hostkey feature
+  * Actually install ssh_keygen stuff
 
  -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Wed, 11 Jun 2014 14:25:34 +0200
 

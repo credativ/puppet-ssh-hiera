@@ -1,4 +1,5 @@
 manifests   etc/puppet/modules/ssh
+lib         etc/puppet/modules/ssh
 LICENSE     usr/share/doc/puppet-module-ssh
 README*     usr/share/doc/puppet-module-ssh
 examples/*  usr/share/doc/puppet-module-ssh/examples
