@@ -54,7 +54,11 @@ module Puppet::Parser::Functions
 
     # Update global known_hosts file
     begin
-        if key_created == true
+        unless File.exists?(known_hosts)
+            File.open(known_hosts, 'w') { |f| f.write "# managed by puppet\n" }
+        end
+
+       if key_created == true
             pub_key = File.open("#{fullpath}/#{config['name']}.pub").read
             content = pub_key.scan(/^.* (.*) .*$/)[0][0]
         
@@ -63,8 +67,8 @@ module Puppet::Parser::Functions
             ipaddress = config['ip']
 
             line = "#{hostname},#{fqdn},#{ipaddress} ssh-#{config['type']} #{content}\n"
-            unless File.foreach(known_hosts).grep? /^#{line}$/
-                File.open(known_hosts, 'a') { 
+            unless File.foreach(known_hosts).grep(/^#{line}$/).size > 0
+                File.open(known_hosts, 'ab') { 
                     |file| file.write("#{hostname},#{fqdn},#{ipaddress} ssh-#{config['type']} #{content}\n") 
                 }
             end
