@@ -19,18 +19,20 @@ module Puppet::Parser::Functions
     config = args.first
 
     config = {
-      'dir'     => 'ssh',
-      'type'    => 'rsa',
-      'size'    => 2048,
-      'public'  => false,
-      'ip'      => lookupvar('ipaddress'),
-      'comment' => '',
+      'dir'                     => 'ssh',
+      'type'                    => 'rsa',
+      'size'                    => 2048,
+      'public'                  => false,
+      'add_to_authorized_keys'  => false
+      'ip'                      => lookupvar('ipaddress'),
+      'comment'                 => '',
     }.merge(config)
 
     config['size'] = 1024 if config['type'] == 'dsa' and config['size'] > 1024
 
     fullpath = "/etc/puppet/#{config['dir']}"
     known_hosts = "#{fullpath}/known_hosts"
+    authorized_keys = "#{fullpath}/authorized_keys"
 
     # Make sure to write out a directory to init if necessary
     begin
@@ -70,6 +72,26 @@ module Puppet::Parser::Functions
             unless File.foreach(known_hosts).grep(/^#{line}$/).size > 0
                 File.open(known_hosts, 'ab') { 
                     |file| file.write("#{hostname},#{fqdn},#{ipaddress} ssh-#{config['type']} #{content}\n") 
+                }
+            end
+        end
+    rescue => e
+        raise Puppet::ParseError, "ssh_keygen(): Unable to update global known_hosts file"
+    end
+
+    # Update authorized_keys
+    begin
+        unless File.exists?(authorized_keys)
+            File.open(authorized_keys, 'w') { |f| f.write "# managed by puppet\n" }
+        end
+
+       if key_created == true
+            pub_key = File.read("#{fullpath}/#{config['name']}.pub")
+
+            line = "#{pub_key} #{comment}\n"
+            unless File.foreach(authorized_keys).grep(/^#{line}$/).size > 0
+                File.open(authorized_keys, 'ab') { 
+                    |file| file.write("#{line}") 
                 }
             end
         end
