@@ -1,8 +1,9 @@
-puppet-module-ssh (1.2.8) UNRELEASED; urgency=low
+puppet-module-ssh (1.2.8) unstable; urgency=low
 
   * add feature to create authorized_keys file
+  * fix syntax
 
- -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Thu, 12 Jun 2014 17:50:06 +0200
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Thu, 12 Jun 2014 17:51:06 +0200
 
 puppet-module-ssh (1.2.7) unstable; urgency=low
 

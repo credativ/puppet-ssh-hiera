@@ -23,7 +23,7 @@ module Puppet::Parser::Functions
       'type'                    => 'rsa',
       'size'                    => 2048,
       'public'                  => false,
-      'add_to_authorized_keys'  => false
+      'add_to_authorized_keys'  => false,
       'ip'                      => lookupvar('ipaddress'),
       'comment'                 => '',
     }.merge(config)
