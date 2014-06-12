@@ -84,6 +84,10 @@ module Puppet::Parser::Functions
       when false
         request = 'private'
         return File.open("#{fullpath}/#{config['name']}").read
+      when "all"
+        request= "all"
+        all_public_keys = File.read(known_hosts)
+        return all_public_keys
       else
         request = 'public'
         pub_key = File.open("#{fullpath}/#{config['name']}.pub").read
