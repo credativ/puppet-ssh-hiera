@@ -42,9 +42,11 @@ module Puppet::Parser::Functions
     end
 
     # Do my keys exist? Well, keygen if they don't!
+    key_created = false
     begin
       unless File.exists?("#{fullpath}/#{config['name']}") then
         %x[/usr/bin/ssh-keygen -v -N '' -C #{config['comment']} -f #{fullpath}/#{config['name']}]
+        key_created = true
       end
     rescue => e
       raise Puppet::ParseError, "ssh_keygen(): Unable to generate ssh key (#{e})"
@@ -52,18 +54,20 @@ module Puppet::Parser::Functions
 
     # Update global known_hosts file
     begin
-        case config['public']
-        when true
-                pub_key = File.open("#{fullpath}/#{config['name']}.pub").read
-                content = pub_key.scan(/^.* (.*) .*$/)[0][0]
-                
-                hostname  = lookupvar('hostname')
-                fqdn      = lookupvar('fqdn')
-                ipaddress = config['ip']
+        if key_created == true
+            pub_key = File.open("#{fullpath}/#{config['name']}.pub").read
+            content = pub_key.scan(/^.* (.*) .*$/)[0][0]
+        
+            hostname  = lookupvar('hostname')
+            fqdn      = lookupvar('fqdn')
+            ipaddress = config['ip']
 
+            line = "#{hostname},#{fqdn},#{ipaddress} ssh-#{config['type']} #{content}\n"
+            unless File.foreach(known_hosts).grep? /^#{line}$/
                 File.open(known_hosts, 'a') { 
                     |file| file.write("#{hostname},#{fqdn},#{ipaddress} ssh-#{config['type']} #{content}\n") 
                 }
+            end
         end
     rescue => e
         raise Puppet::ParseError, "ssh_keygen(): Unable to update global known_hosts file"
