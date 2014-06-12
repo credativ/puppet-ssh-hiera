@@ -1,3 +1,9 @@
+puppet-module-ssh (1.2.4) unstable; urgency=low
+
+  * Add known_hosts generation
+
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Thu, 12 Jun 2014 10:14:34 +0200
+
 puppet-module-ssh (1.2.3) unstable; urgency=low
 
   * Fix variable interpolation

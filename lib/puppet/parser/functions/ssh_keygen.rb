@@ -23,12 +23,14 @@ module Puppet::Parser::Functions
       'type'    => 'rsa',
       'size'    => 2048,
       'public'  => false,
+      'ip'      => lookupvar('ipaddress'),
       'comment' => '',
     }.merge(config)
 
     config['size'] = 1024 if config['type'] == 'dsa' and config['size'] > 1024
 
     fullpath = "/etc/puppet/#{config['dir']}"
+    known_hosts = "#{fullpath}/known_hosts"
 
     # Make sure to write out a directory to init if necessary
     begin
@@ -47,6 +49,26 @@ module Puppet::Parser::Functions
     rescue => e
       raise Puppet::ParseError, "ssh_keygen(): Unable to generate ssh key (#{e})"
     end
+
+    # Update global known_hosts file
+    begin
+        case config['public']
+        when true
+                pub_key = File.open("#{fullpath}/#{config['name']}.pub").read
+                content = pub_key.scan(/^.* (.*) .*$/)[0][0]
+                
+                hostname  = lookupvar('hostname')
+                fqdn      = lookupvar('fqdn')
+                ipaddress = config['ip']
+
+                File.open(known_hosts, 'a') { 
+                    |file| file.write("#{hostname},#{fqdn},#{ipaddress} ssh-#{config['type']} #{content}\n") 
+                }
+        end
+    rescue => e
+        raise Puppet::ParseError, "ssh_keygen(): Unable to update global known_hosts file"
+    end
+
 
     # Return ssh key content based on request
     begin
