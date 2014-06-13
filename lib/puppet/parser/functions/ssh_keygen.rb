@@ -76,11 +76,14 @@ module Puppet::Parser::Functions
             end
         end
     rescue => e
-        raise Puppet::ParseError, "ssh_keygen(): Unable to update global known_hosts file"
+        raise Puppet::ParseError, "ssh_keygen(): Unable to update global known_hosts file: #{e}"
     end
 
     # Update authorized_keys
     begin
+        unless config['add_to_authorized_keys'] == true
+            return
+
         unless File.exists?(authorized_keys)
             File.open(authorized_keys, 'w') { |f| f.write "# managed by puppet\n" }
         end
@@ -96,7 +99,7 @@ module Puppet::Parser::Functions
             end
         end
     rescue => e
-        raise Puppet::ParseError, "ssh_keygen(): Unable to update global known_hosts file"
+        raise Puppet::ParseError, "ssh_keygen(): Unable to update global authorized_keys file: #{e}"
     end
 
 
