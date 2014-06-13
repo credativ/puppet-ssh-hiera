@@ -83,6 +83,7 @@ module Puppet::Parser::Functions
     begin
         unless config['add_to_authorized_keys'] == true
             return
+        end
 
         unless File.exists?(authorized_keys)
             File.open(authorized_keys, 'w') { |f| f.write "# managed by puppet\n" }
@@ -90,8 +91,7 @@ module Puppet::Parser::Functions
 
        if key_created == true
             pub_key = File.read("#{fullpath}/#{config['name']}.pub")
-
-            line = "#{pub_key} #{comment}\n"
+            line = "#{pub_key} #{config['comment']}\n"
             unless File.foreach(authorized_keys).grep(/^#{line}$/).size > 0
                 File.open(authorized_keys, 'ab') { 
                     |file| file.write("#{line}") 
