@@ -4,11 +4,12 @@ class ssh::known_hosts (
     ) {
 
     if $manage_hostkey {
-        $authorized_keys = ssh_keygen({ public => 'all', dir => 'ssh/hostkeys'})
+        $known_hosts = ssh_keygen( { "request" => 'known_hosts', dir => 'ssh/hostkeys'}         )
+
         # if we are managing hostkeys, we are using its known_hosts file
         file { '/etc/ssh/ssh_known_hosts':
             mode    => '0644',
-            content => $authorized_keys
+            content => $known_hosts
         }
 
     } else {

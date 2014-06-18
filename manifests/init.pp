@@ -135,7 +135,7 @@ set <%= k %> <%= v %>
 
     class { 'ssh::hostkey':
         manage_hostkey  => $manage_hostkey,
-    }
+    } ~>
     class { 'ssh::known_hosts':
         manage          => $manage_known_hosts,
         manage_hostkey  => $manage_hostkey,
