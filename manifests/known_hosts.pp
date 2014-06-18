@@ -12,20 +12,9 @@ class ssh::known_hosts (
         }
 
     } else {
-        # Export our own ssh key
-        @@sshkey { $::hostname:
-            host_aliases    => [$::fqdn, $::ipaddress],
-            type            => rsa,
-            key             => $::sshrsakey
-        }
-
-        Sshkey <<| |>>
-        
-        # WORKAROUND FOR http://projects.reductivelabs.com/issues/2014
-        # ssh_known_hosts file is created with wrong permissions
-        file { '/etc/ssh/ssh_known_hosts':
-            mode => '0644'
-        }
+        # storeconfig based implementation is in another class, because otherwise
+        # the server is complaining loud if storeconfig is not enabled
+        class { 'ssh::known_hosts::storeconfig': }
     }
     
 }
