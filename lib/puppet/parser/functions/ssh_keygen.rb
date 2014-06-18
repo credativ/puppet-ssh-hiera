@@ -33,12 +33,12 @@ module Puppet::Parser::Functions
         raise Puppet::ParseError, "ssh_keygen(): request argument is required"
     end
 
-    if config['name'].nil? and (request != 'authorized_keys' and request != 'known_hosts)
+    if config['name'].nil? and (request != 'authorized_keys' and request != 'known_hosts')
         raise Puppet::ParseError, "ssh_keygen(): name argument is required"
     end
 
     # Let comment default to something sensible, unless the user really
-    # wants to set it to '' (then we don't stop him)
+    # wants to set it to ''(then we don't stop him)
     if config['comment'].nil?
         hostname = lookupvar('hostname')
         if config['hostkey'] == true
