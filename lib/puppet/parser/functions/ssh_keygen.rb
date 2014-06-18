@@ -33,7 +33,7 @@ module Puppet::Parser::Functions
         raise Puppet::ParseError, "ssh_keygen(): request argument is required"
     end
 
-    if config['name'].nil?
+    if config['name'].nil? and (request != 'authorized_keys' and request != 'known_hosts)
         raise Puppet::ParseError, "ssh_keygen(): name argument is required"
     end
 
