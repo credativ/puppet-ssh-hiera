@@ -61,12 +61,6 @@ def add_key_to_known_hosts(fullpath, name, keyfile)
     ipaddress = lookupvar('ipaddress')
     key       = get_pubkey(keyfile, false)
 
-    cmdline   = "ssh-keygen -q -R #{hostname} -f #{known_hosts}"
-    output    = %x[#{cmdline}]
-    if $?.exitstatus != 0
-        raise Puppet::ParseError, "calling '#{cmdline}' resulted in error: #{output}"
-    end
-
     line = "#{hostname},#{fqdn},#{ipaddress} #{key}"
     File.open(known_hosts, 'a') { |file| file.write(line) }
 
