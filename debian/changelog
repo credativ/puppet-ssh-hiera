@@ -1,3 +1,9 @@
+puppet-module-ssh (1.3.2) unstable; urgency=medium
+
+  * Fix a couple of bugs
+
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Fri, 20 Jun 2014 14:10:26 +0200
+
 puppet-module-ssh (1.3.1) unstable; urgency=medium
 
   * Make ssh_keygen puppet 2.7 compatible
