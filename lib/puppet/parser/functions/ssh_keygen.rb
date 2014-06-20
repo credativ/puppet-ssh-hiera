@@ -27,7 +27,7 @@ def create_key_if_not_exists(fullpath, name, comment, type, hostkey, authkey, re
     begin
         keyfile = "#{fullpath}/#{name}"
         unless File.exists?(keyfile)
-            cmdline = "/usr/bin/ssh-keygen -q -t rsa -N '' -C '#{comment}' -f #{keyfile}"
+            cmdline = "/usr/bin/ssh-keygen -q -t #{type} -N '' -C '#{comment}' -f #{keyfile}"
             output = %x[#{cmdline}]
             if $?.exitstatus != 0
                 raise Puppet::ParseError, "calling '#{cmdline}' resulted in error: #{output}"
