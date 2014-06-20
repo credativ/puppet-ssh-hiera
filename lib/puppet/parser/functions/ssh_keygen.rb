@@ -12,6 +12,119 @@
 #     :authkey (weither the key is an authkey or not. defines weither to add it to authorized_keys or not)
 #
 require 'fileutils'
+
+def init(fullpath)
+    if File.exists?(fullpath) and not File.directory?(fullpath)
+        raise Puppet::ParseError, "ssh_keygen(): #{fullpath} exists but is not directory"
+    end
+    if not File.directory?(fullpath)
+        debug "creating directory #{fullpath}"
+        FileUtils.mkdir_p fullpath
+    end
+end
+
+def create_key_if_not_exists(fullpath, name, comment, type, hostkey, authkey, request)
+    begin
+        keyfile = "#{fullpath}/#{name}"
+        unless File.exists?(keyfile)
+            cmdline = "/usr/bin/ssh-keygen -q -t rsa -N '' -C '#{comment}' -f #{keyfile}"
+            output = %x[#{cmdline}]
+            if $?.exitstatus != 0
+                raise Puppet::ParseError, "calling '#{cmdline}' resulted in error: #{output}"
+            end
+
+            if hostkey == true
+                add_key_to_known_hosts(fullpath, name, keyfile)
+            end
+
+            if authkey == true
+                add_key_to_authorized_keys(fullpath, name, keyfile)
+            end
+        else
+            debug "ssh_keygen: key already exists. using previously created key in given '#{request}' request"
+        end
+    rescue => e
+        raise Puppet::ParseError, "ssh_keygen(): unable to generate ssh key (#{e})"
+    end
+end
+
+def add_key_to_known_hosts(fullpath, name, keyfile)
+    debug "ssh_keygen: adding key #{name} to known_hosts file"
+
+    known_hosts = "#{fullpath}/known_hosts"
+    if not File.exists?(known_hosts)
+        File.open(known_hosts, 'w') { |f| f.write "# managed by puppet\n" }
+    end
+
+    hostname  = lookupvar('hostname')
+    fqdn      = lookupvar('fqdn')
+    ipaddress = lookupvar('ipaddress')
+    key       = get_pubkey(keyfile, false)
+
+    cmdline   = "ssh-keygen -q -R #{hostname} -f #{known_hosts}"
+    output    = %x[#{cmdline}]
+    if $?.exitstatus != 0
+        raise Puppet::ParseError, "calling '#{cmdline}' resulted in error: #{output}"
+    end
+
+    line = "#{hostname},#{fqdn},#{ipaddress} #{key}"
+    File.open(known_hosts, 'a') { |file| file.write(line) }
+
+    debug "ssh_keygen: updated known_hosts file at '#{known_hosts}'"
+end
+
+def add_key_to_authorized_keys(fullpath, name, keyfile)
+    debug "ssh_keygen: adding key #{name} to authorized_keys file"
+
+    authorized_keys = "#{fullpath}/authorized_keys"
+    if not File.exists?(authorized_keys)
+        File.open(authorized_keys, 'w') { |f| f.write "# managed by puppet\n" }
+    end
+
+    key       = get_pubkey(keyfile, false)
+
+    line = "#{key}"
+    File.open(authorized_keys, 'a') { |file| file.write(line) }
+
+    debug "ssh_keygen: updated authorized_keys file at '#{authorized_keys}'"
+end
+
+
+def get_known_hosts(fullpath)
+    known_hosts = "#{fullpath}/known_hosts"
+    return File.open(known_hosts).read
+end
+
+def get_authorized_keys(fullpath)
+    known_hosts = "#{fullpath}/authorized_keys"
+    return File.open(known_hosts).read
+end
+
+
+def get_privkey(keyfile)
+    begin
+        kf = File.open(keyfile).read
+        return kf
+    rescue => e
+        raise Puppet::ParseError, "ssh_keygen(): unable to read private key file: #{e}"
+    end
+end
+
+def get_pubkey(keyfile, only_keypart = false)
+    begin
+        keyfile = "#{keyfile}.pub"
+        pubkey = File.open(keyfile).read
+        if only_keypart == true
+            pubkey.scan(/^.* (.*) .*$/)[0][0]
+        else
+            return pubkey
+        end 
+    rescue => e
+        raise Puppet::ParseError, "ssh_keygen: unable to read public key: #{key}"
+    end
+end
+
+
 module Puppet::Parser::Functions
   newfunction(:ssh_keygen, :type => :rvalue) do |args|
     unless args.first.class == Hash then
@@ -49,117 +162,6 @@ module Puppet::Parser::Functions
         end
     end
 
-
-    def init(fullpath)
-        if File.exists?(fullpath) and not File.directory?(fullpath)
-            raise Puppet::ParseError, "ssh_keygen(): #{fullpath} exists but is not directory"
-        end
-        if not File.directory?(fullpath)
-            debug "creating directory #{fullpath}"
-            FileUtils.mkdir_p fullpath
-        end
-    end
-
-    def create_key_if_not_exists(fullpath, name, comment, type, hostkey, authkey, request)
-        begin
-            keyfile = "#{fullpath}/#{name}"
-            unless File.exists?(keyfile)
-                cmdline = "/usr/bin/ssh-keygen -q -t rsa -N '' -C '#{comment}' -f #{keyfile}"
-                output = %x[#{cmdline}]
-                if $?.exitstatus != 0
-                    raise Puppet::ParseError, "calling '#{cmdline}' resulted in error: #{output}"
-                end
-
-                if hostkey == true
-                    add_key_to_known_hosts(fullpath, name, keyfile)
-                end
-
-                if authkey == true
-                    add_key_to_authorized_keys(fullpath, name, keyfile)
-                end
-            else
-                debug "ssh_keygen: key already exists. using previously created key in given '#{request}' request"
-            end
-        rescue => e
-            raise Puppet::ParseError, "ssh_keygen(): unable to generate ssh key (#{e})"
-        end
-    end
-
-    def add_key_to_known_hosts(fullpath, name, keyfile)
-        debug "ssh_keygen: adding key #{name} to known_hosts file"
-
-        known_hosts = "#{fullpath}/known_hosts"
-        if not File.exists?(known_hosts)
-            File.open(known_hosts, 'w') { |f| f.write "# managed by puppet\n" }
-        end
-
-        hostname  = lookupvar('hostname')
-        fqdn      = lookupvar('fqdn')
-        ipaddress = lookupvar('ipaddress')
-        key       = get_pubkey(keyfile, false)
-    
-        cmdline   = "ssh-keygen -q -R #{hostname} -f #{known_hosts}"
-        output    = %x[#{cmdline}]
-        if $?.exitstatus != 0
-            raise Puppet::ParseError, "calling '#{cmdline}' resulted in error: #{output}"
-        end
-
-        line = "#{hostname},#{fqdn},#{ipaddress} #{key}"
-        File.open(known_hosts, 'a') { |file| file.write(line) }
-
-        debug "ssh_keygen: updated known_hosts file at '#{known_hosts}'"
-    end
-
-    def add_key_to_authorized_keys(fullpath, name, keyfile)
-        debug "ssh_keygen: adding key #{name} to authorized_keys file"
-
-        authorized_keys = "#{fullpath}/authorized_keys"
-        if not File.exists?(authorized_keys)
-            File.open(authorized_keys, 'w') { |f| f.write "# managed by puppet\n" }
-        end
-
-        key       = get_pubkey(keyfile, false)
-    
-        line = "#{key}"
-        File.open(authorized_keys, 'a') { |file| file.write(line) }
-
-        debug "ssh_keygen: updated authorized_keys file at '#{authorized_keys}'"
-    end
-
-
-    def get_known_hosts(fullpath)
-        known_hosts = "#{fullpath}/known_hosts"
-        return File.open(known_hosts).read
-    end
-
-    def get_authorized_keys(fullpath)
-        known_hosts = "#{fullpath}/authorized_keys"
-        return File.open(known_hosts).read
-    end
-
-
-    def get_privkey(keyfile)
-        begin
-            kf = File.open(keyfile).read
-            return kf
-        rescue => e
-            raise Puppet::ParseError, "ssh_keygen(): unable to read private key file: #{e}"
-        end
-    end
-
-    def get_pubkey(keyfile, only_keypart = false)
-        begin
-            keyfile = "#{keyfile}.pub"
-            pubkey = File.open(keyfile).read
-            if only_keypart == true
-                pubkey.scan(/^.* (.*) .*$/)[0][0]
-            else
-                return pubkey
-            end 
-        rescue => e
-            raise Puppet::ParseError, "ssh_keygen: unable to read public key: #{key}"
-        end
-    end
 
     # construct fullpath from puppet base and dir argument
     fullpath = "/etc/puppet/#{config['dir']}"
