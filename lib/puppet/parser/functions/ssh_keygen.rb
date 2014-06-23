@@ -10,6 +10,7 @@
 #     :dir     (the subdir of /etc/puppet/ to store the key in - default: 'ssh')
 #     :hostkey (weither the key should be a hostkey or not. defines weither to add it to known_hosts or not)
 #     :authkey (weither the key is an authkey or not. defines weither to add it to authorized_keys or not)
+#     :as_hash (weither to return authorized_keys as list of hashes (only for request authorized keys))
 #
 require 'fileutils'
 
@@ -89,9 +90,33 @@ def get_known_hosts(fullpath)
     return File.open(known_hosts).read
 end
 
-def get_authorized_keys(fullpath)
+def get_authorized_keys(fullpath, as_hash)
     known_hosts = "#{fullpath}/authorized_keys"
-    return File.open(known_hosts).read
+
+    debug "as_hash: xxx"
+    unless as_hash == true
+        return File.open(known_hosts).read
+    end
+
+    result = {}
+    File.foreach(known_hosts) { |line|
+        next if line =~ /^#/
+        next if line =~ /^$/
+
+        (type, key, comment) = line.split(' ')
+
+        if comment.nil?
+            debug "skipping invalid authorized_key line: '#{line}'"
+        end
+
+        result[comment] = { 
+                'type'      => type,
+                'key'       => key,
+                'name'   => comment
+        }
+    }
+
+    return result
 end
 
 
@@ -134,6 +159,7 @@ module Puppet::Parser::Functions
       'authkey'                 => false,
       'request'                 => nil,
       'comment'                 => nil,
+      'as_hash'             => false,
     }.merge(config)
 
     if config['request'].nil?
@@ -185,7 +211,7 @@ module Puppet::Parser::Functions
             # TODO: Add a flag for created keys, that they are auth keys
             # TODO: Add a method to create authorized_keys from auth flagged keys
             # TODO: Add a method to return authorized_keys content
-            return get_authorized_keys(fullpath)
+            return get_authorized_keys(fullpath, config['as_hash'])
         end
     rescue => e
         raise Puppet::ParseError, "ssh_keygen(): unable to fulfill request '#{config['request']}': #{e}"
