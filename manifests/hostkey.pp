@@ -18,7 +18,7 @@ class ssh::hostkey (
             owner   => 'root',
             group   => 'root',
             mode    => 0644,
-            content => "ssh-rsa $rsa_priv host_rsa_${::hostname}\n",
+            content => "ssh-rsa $rsa_pub host_rsa_${::hostname}\n",
         }
 
         # generate and store key on master
@@ -36,7 +36,7 @@ class ssh::hostkey (
             owner   => 'root',
             group   => 'root',
             mode    => 0644,
-            content => "ssh-dsa $dsa_priv host_dsa_${::hostname}\n",
+            content => "ssh-dsa $dsa_pub host_dsa_${::hostname}\n",
         }
 
         # generate and store key on master
@@ -54,7 +54,7 @@ class ssh::hostkey (
             owner   => 'root',
             group   => 'root',
             mode    => 0644,
-            content => "ssh-ecdsa $ecdsa_priv host_ecdsa_${::hostname}\n",
+            content => "ssh-ecdsa $ecdsa_pub host_ecdsa_${::hostname}\n",
         }
 
 
