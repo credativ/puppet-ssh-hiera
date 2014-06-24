@@ -1,1 +1,1 @@
-etc/puppet/modules/ssh
+usr/share/puppet/modules.available/ssh
