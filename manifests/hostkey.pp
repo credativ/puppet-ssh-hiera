@@ -1,6 +1,6 @@
 class ssh::hostkey (
     $manage_hostkey,
-    $hostaliases,
+    $hostaliases = undef,
 ) {
 
     if $manage_hostkey {
