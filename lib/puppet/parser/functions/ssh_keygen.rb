@@ -9,6 +9,7 @@
 #     :type    (the key type - default: 'rsa')
 #     :dir     (the subdir of /etc/puppet/ to store the key in - default: 'ssh')
 #     :hostkey (weither the key should be a hostkey or not. defines weither to add it to known_hosts or not)
+#     :hostaliases (specify aliases for the host for whom a hostkey is created (will be added to known_hosts))
 #     :authkey (weither the key is an authkey or not. defines weither to add it to authorized_keys or not)
 #     :as_hash (weither to return authorized_keys as list of hashes (only for request authorized keys))
 #
@@ -24,7 +25,7 @@ def init(fullpath)
     end
 end
 
-def create_key_if_not_exists(fullpath, name, comment, type, hostkey, authkey, request)
+def create_key_if_not_exists(fullpath, name, comment, type, hostkey, hostaliases, authkey, request)
     begin
         keyfile = "#{fullpath}/#{name}"
         unless File.exists?(keyfile)
@@ -35,7 +36,7 @@ def create_key_if_not_exists(fullpath, name, comment, type, hostkey, authkey, re
             end
 
             if hostkey == true
-                add_key_to_known_hosts(fullpath, name, keyfile)
+                add_key_to_known_hosts(fullpath, name, hostaliases, keyfile)
             end
 
             if authkey == true
@@ -49,7 +50,7 @@ def create_key_if_not_exists(fullpath, name, comment, type, hostkey, authkey, re
     end
 end
 
-def add_key_to_known_hosts(fullpath, name, keyfile)
+def add_key_to_known_hosts(fullpath, name, aliases, keyfile)
     debug "ssh_keygen: adding key #{name} to known_hosts file"
 
     known_hosts = "#{fullpath}/known_hosts"
@@ -60,9 +61,15 @@ def add_key_to_known_hosts(fullpath, name, keyfile)
     hostname  = lookupvar('hostname')
     fqdn      = lookupvar('fqdn')
     ipaddress = lookupvar('ipaddress')
+
+    hosts = "#{hostname},#{fqdn},#{ipaddress}"
+    if not aliases.nil?
+        hosts << "," << aliases
+    end
+
     key       = get_pubkey(keyfile, false)
 
-    line = "#{hostname},#{fqdn},#{ipaddress} #{key}"
+    line = "#{hosts} #{key}"
     File.open(known_hosts, 'a') { |file| file.write(line) }
 
     debug "ssh_keygen: updated known_hosts file at '#{known_hosts}'"
@@ -156,10 +163,11 @@ module Puppet::Parser::Functions
       'dir'                     => 'ssh',
       'type'                    => 'rsa',
       'hostkey'                 => false,
+      'hostaliases'             => nil,
       'authkey'                 => false,
       'request'                 => nil,
       'comment'                 => nil,
-      'as_hash'             => false,
+      'as_hash'                 => false,
     }.merge(config)
 
     if config['request'].nil?
@@ -193,6 +201,7 @@ module Puppet::Parser::Functions
         config['comment'],
         config['type'],
         config['hostkey'],
+        config['hostaliases'],
         config['authkey'],
         config['request']
     ) 
