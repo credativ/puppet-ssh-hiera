@@ -1,3 +1,9 @@
+puppet-module-ssh (1.4.3) unstable; urgency=medium
+
+  * Add hostaliases feature
+
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Thu, 26 Jun 2014 09:23:34 +0200
+
 puppet-module-ssh (1.4.2) unstable; urgency=medium
 
   * Change module path

@@ -77,6 +77,7 @@ class ssh (
     $manage_users       = params_lookup('manage_users'),
     $manage_groups      = params_lookup('manage_groups'),
     $manage_hostkey     = params_lookup('manage_hostkey'),
+    $hostaliases        = params_lookup('hostaliases'),
     $users              = params_lookup('users'),
     $groups             = params_lookup('groups'),
     $service_name       = params_lookup('service_name'),
@@ -135,6 +136,7 @@ set <%= k %> <%= v %>
 
     class { 'ssh::hostkey':
         manage_hostkey  => $manage_hostkey,
+        hostaliases     => $hostaliases
     } ~>
     class { 'ssh::known_hosts':
         manage          => $manage_known_hosts,
