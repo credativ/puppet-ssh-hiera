@@ -95,23 +95,7 @@ class ssh (
         mode    => '0644',
         notify  => Service[$service_name],
         require => Package['openssh-server'],
-    }
-
-    $additional_ssh_options = inline_template("
-set PermitRootLogin $permit_root_login
-set ListenAddress $listen_address
-<% if @options -%>
-<% options.each do |k, v| -%>
-set <%= k %> <%= v %>
-<% end -%>
-<% end -%>
-")
-
-    augeas { 'sshd_config':
-        context => '/files/etc/ssh/sshd_config',
-        changes => $additional_ssh_options
-        #split('\n', $ssh_options))
-        
+        content => template('ssh/sshd_config.erb')
     }
 
     service { $service_name:

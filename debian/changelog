@@ -1,3 +1,10 @@
+puppet-module-ssh (1.4.5) unstable; urgency=medium
+
+  * Use a template for sshd_config, because augeas stuff gets complicated, now
+    that we need multiple ListenAddress lines etc.
+
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Tue, 01 Jul 2014 10:11:03 +0200
+
 puppet-module-ssh (1.4.4) unstable; urgency=medium
 
   * Make hostaliases argument optional

@@ -1,0 +1,95 @@
+# Package generated configuration file
+# See the sshd_config(5) manpage for details
+
+# What ports, IPs and protocols we listen for
+Port <%= options['Port'] || '22' %>
+# Use these options to restrict which interfaces/protocols sshd will bind to
+#ListenAddress ::
+#ListenAddress 0.0.0.0
+<% if listen_address.respond_to?('each') -%>
+<% listen_address.each do |listener| -%>
+ListenAddress <%= listener %>
+<% end -%>
+<% else -%>
+ListenAddress <%= listen_address %>
+<% end -%>
+
+Protocol <= options['Protocol'] || '2' %>
+# HostKeys for protocol version 2
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_dsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+#Privilege Separation is turned on for security
+UsePrivilegeSeparation <%= options['UsePrivilegeSeparation'] || 'yes' %>
+
+# Lifetime and size of ephemeral version 1 server key
+KeyRegenerationInterval <%= options['KeyRegenerationInterval'] || '3600' %>
+ServerKeyBits <%= options['ServerKeyBits'] || '1024' %>
+
+# <%= options['#'] || 'Logging' %>
+SyslogFacility <%= options['SyslogFacility'] || 'AUTH' %>
+LogLevel <%= options['LogLevel'] || 'INFO' %>
+
+# Authentication:
+LoginGraceTime <%= options['LoginGraceTime'] || '120' %>
+PermitRootLogin <%= permit_root_login %>
+StrictModes <%= options['StrictModes'] || 'yes' %>
+
+RSAAuthentication yes
+PubkeyAuthentication yes
+#AuthorizedKeysFile	%h/.ssh/authorized_keys
+
+# Don't read the user's ~/.rhosts and ~/.shosts files
+IgnoreRhosts <%= options['IgnoreRhosts'] || 'yes' %>
+# For this to work you will also need host keys in /etc/ssh_known_hosts
+RhostsRSAAuthentication <%= options['RhostsRSAAuthentication'] || 'no' %>
+# similar for protocol version 2
+HostbasedAuthentication <%= options['HostbasedAuthentication'] || 'no' %>
+# Uncomment if you don't trust ~/.ssh/known_hosts for RhostsRSAAuthentication
+#IgnoreUserKnownHosts yes
+
+# To enable empty passwords, change to yes (NOT RECOMMENDED)
+PermitEmptyPasswords <%= options['PermitEmptyPasswords'] || 'no' %>
+
+# Change to yes to enable challenge-response passwords (beware issues with
+# some PAM modules and threads)
+ChallengeResponseAuthentication <%= options['ChallengeResponseAuthentication'] || 'no' %>
+
+# Change to no to disable tunnelled clear text passwords
+#PasswordAuthentication yes
+
+# Kerberos options
+#KerberosAuthentication no
+#KerberosGetAFSToken no
+#KerberosOrLocalPasswd yes
+#KerberosTicketCleanup yes
+
+# GSSAPI options
+#GSSAPIAuthentication no
+#GSSAPICleanupCredentials yes
+
+X11Forwarding <%= options['X11Forwarding'] || 'yes' %>
+X11DisplayOffset <%= options['X11DisplayOffset'] || '10' %>
+PrintMotd <%= options['PrintMotd'] || 'no' %>
+PrintLastLog <%= options['PrintLastLog'] || 'yes' %>
+TCPKeepAlive <%= options['TCPKeepAlive'] || 'yes' %>
+#UseLogin no
+
+#MaxStartups 10:30:60
+#Banner /etc/issue.net
+
+# Allow client to pass locale environment variables
+AcceptEnv LANG <%= options['AcceptEnv LANG'] || 'LC_*' %>
+
+Subsystem sftp /usr/lib/openssh/sftp-server
+
+# Set this to 'yes' to enable PAM authentication, account processing,
+# and session processing. If this is enabled, PAM authentication will
+# be allowed through the ChallengeResponseAuthentication and
+# PasswordAuthentication.  Depending on your PAM configuration,
+# PAM authentication via ChallengeResponseAuthentication may bypass
+# the setting of "PermitRootLogin without-password".
+# If you just want the PAM account and session checks to run without
+# PAM authentication, then enable this but set PasswordAuthentication
+# and ChallengeResponseAuthentication to 'no'.
+UsePAM <%= options['UsePAM'] || 'yes' %>
