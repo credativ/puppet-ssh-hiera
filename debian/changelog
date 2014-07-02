@@ -1,3 +1,9 @@
+puppet-module-ssh (1.4.11) UNRELEASED; urgency=medium
+
+  * Add key to known_hosts if not already their
+
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Wed, 02 Jul 2014 17:50:17 +0200
+
 puppet-module-ssh (1.4.10) unstable; urgency=medium
 
   * Add further error checking

@@ -35,15 +35,7 @@ def create_key_if_not_exists(fullpath, name, comment, type, hostkey, hostaliases
                 raise Puppet::ParseError, "calling '#{cmdline}' resulted in error: #{output}"
             end
 
-            begin
-                if hostkey == true
-                    add_key_to_known_hosts(fullpath, name, hostaliases, keyfile)
-                end
-            rescue => e
-                raise Puppet::ParseError, "ssh_keygen(): adding key to known hosts failed #{e}"
-            end
-
-            begin
+           begin
                 if authkey == true
                     add_key_to_authorized_keys(fullpath, name, keyfile)
                 end
@@ -55,6 +47,14 @@ def create_key_if_not_exists(fullpath, name, comment, type, hostkey, hostaliases
         end
     rescue => e
         raise Puppet::ParseError, "ssh_keygen(): unable to generate ssh key (#{e})"
+    end
+
+    begin
+        if hostkey == true
+            add_key_to_known_hosts(fullpath, name, hostaliases, keyfile)
+        end
+    rescue => e
+        raise Puppet::ParseError, "ssh_keygen(): adding key to known hosts failed #{e}"
     end
 end
 
@@ -75,16 +75,23 @@ def add_key_to_known_hosts(fullpath, name, aliases, keyfile)
     end
 
     hosts = "#{hostname},#{fqdn},#{ipaddress}"
-    if not aliases.nil?
+    unless aliases.nil?
         hosts << "," << aliases
     end
 
-    key       = get_pubkey(keyfile, false)
+    key             = get_pubkey(keyfile, false)
+    search_string   = "^.* " + Regexp.escape(key) + "$"
 
-    line = "#{hosts} #{key}"
-    File.open(known_hosts, 'a') { |file| file.write(line) }
+    lines = File.open(known_hosts).readlines
 
-    debug "ssh_keygen: updated known_hosts file at '#{known_hosts}'"
+    unless File.open(known_hosts).readlines.grep(/#{search_string}/).size > 0
+        debug "key not found in known_hosts file, adding it."
+        line = "#{hosts} #{key}"
+        File.open(known_hosts, 'a') { |file| file.write(line) }
+        debug "ssh_keygen: updated known_hosts file at '#{known_hosts}'"
+    else
+        debug "ssh_keygen: known_hosts file is already up to date."
+    end
 end
 
 def add_key_to_authorized_keys(fullpath, name, keyfile)
