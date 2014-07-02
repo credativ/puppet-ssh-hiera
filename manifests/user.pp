@@ -5,7 +5,7 @@ define ssh::user(
     $ssh_key='',
     $ssh_keys={},
     $groups=undef,
-    $shell='bin/bash',
+    $shell='/bin/bash',
     $pwhash='',
     $username=$title,
     $managehome=true,

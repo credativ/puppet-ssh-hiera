@@ -1,3 +1,9 @@
+puppet-module-ssh (1.4.11) unstable; urgency=medium
+
+  * Fix default shell (/bin/bash)
+
+ -- Arnd Hannemann <arnd.hannemann@credativ.de>  Wed, 02 Jul 2014 13:11:39 +0200
+
 puppet-module-ssh (1.4.10) unstable; urgency=medium
 
   * Add further error checking
