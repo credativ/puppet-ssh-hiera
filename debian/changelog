@@ -1,8 +1,14 @@
-puppet-module-ssh (1.4.11) UNRELEASED; urgency=medium
+puppet-module-ssh (1.4.12) unstable; urgency=medium
 
   * Add key to known_hosts if not already their
 
- -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Wed, 02 Jul 2014 17:50:17 +0200
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Wed, 02 Jul 2014 17:50:49 +0200
+
+puppet-module-ssh (1.4.11) unstable; urgency=medium
+
+  * Fix default shell (/bin/bash)
+
+ -- Arnd Hannemann <arnd.hannemann@credativ.de>  Wed, 02 Jul 2014 13:11:39 +0200
 
 puppet-module-ssh (1.4.10) unstable; urgency=medium
 
