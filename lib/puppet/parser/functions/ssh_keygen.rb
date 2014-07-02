@@ -35,12 +35,20 @@ def create_key_if_not_exists(fullpath, name, comment, type, hostkey, hostaliases
                 raise Puppet::ParseError, "calling '#{cmdline}' resulted in error: #{output}"
             end
 
-            if hostkey == true
-                add_key_to_known_hosts(fullpath, name, hostaliases, keyfile)
+            begin
+                if hostkey == true
+                    add_key_to_known_hosts(fullpath, name, hostaliases, keyfile)
+                end
+            rescue => e
+                raise Puppet::ParseError, "ssh_keygen(): adding key to known hosts failed #{e}"
             end
 
-            if authkey == true
-                add_key_to_authorized_keys(fullpath, name, keyfile)
+            begin
+                if authkey == true
+                    add_key_to_authorized_keys(fullpath, name, keyfile)
+                end
+            rescue => e
+                raise Puppet::ParseError, "ssh_keygen(): adding key to authorized_keys failed #{e}"
             end
         else
             debug "ssh_keygen: key already exists. using previously created key in given '#{request}' request"
@@ -61,6 +69,10 @@ def add_key_to_known_hosts(fullpath, name, aliases, keyfile)
     hostname  = lookupvar('hostname')
     fqdn      = lookupvar('fqdn')
     ipaddress = lookupvar('ipaddress')
+
+    if not fqdn
+        raise Puppet::ParseError, "unable to determine fqdn: please check system configuration"
+    end
 
     hosts = "#{hostname},#{fqdn},#{ipaddress}"
     if not aliases.nil?
