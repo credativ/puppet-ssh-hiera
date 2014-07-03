@@ -75,7 +75,7 @@ def add_key_to_known_hosts(fullpath, name, aliases, keyfile)
     end
 
     hosts = "#{hostname},#{fqdn},#{ipaddress}"
-    unless aliases.nil?
+    unless aliases.nil? or aliases == :undef
         hosts << "," << aliases
     end
 

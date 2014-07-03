@@ -1,3 +1,13 @@
+puppet-module-ssh (1.4.13) UNRELEASED; urgency=medium
+
+  * Fix "Can't convert symbol into string" error:
+    If aliases argument is set to "undef" in puppet, the puppet parser
+    function is not beeing passed 'nil' as I would have excepted. Instead
+    its beeing passed a symbol ':undef'. Therefore we need to check this
+    as well.
+
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Thu, 03 Jul 2014 10:03:12 +0200
+
 puppet-module-ssh (1.4.12) unstable; urgency=medium
 
   * Add key to known_hosts if not already their
