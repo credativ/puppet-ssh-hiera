@@ -1,4 +1,4 @@
-puppet-module-ssh (1.4.13) UNRELEASED; urgency=medium
+puppet-module-ssh (1.5.1) unstable; urgency=medium
 
   * Fix "Can't convert symbol into string" error:
     If aliases argument is set to "undef" in puppet, the puppet parser
@@ -9,7 +9,7 @@ puppet-module-ssh (1.4.13) UNRELEASED; urgency=medium
     a specific hostkey for multiple hosts (e.g. hosts that are beeing adressed
     via a VIP)
 
- -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Thu, 03 Jul 2014 10:03:12 +0200
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Thu, 03 Jul 2014 10:12:39 +0200
 
 puppet-module-ssh (1.4.12) unstable; urgency=medium
 
