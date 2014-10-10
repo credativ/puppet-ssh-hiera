@@ -1,4 +1,10 @@
-puppet-module-ssh (1.5.3) UNRELEASED; urgency=medium
+puppet-module-ssh (1.5.4) unstable; urgency=medium
+
+  * Bugfix: Use hostkey_name for rollout of public hostkeys 
+
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Fri, 10 Oct 2014 10:43:55 +0200
+
+puppet-module-ssh (1.5.3) unstable; urgency=medium
 
   * Add some specific infos to the module header, where the config comes from
 
