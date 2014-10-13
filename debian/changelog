@@ -1,9 +1,9 @@
-puppet-module-ssh (1.5.4.2) UNRELEASED; urgency=medium
+puppet-module-ssh (1.5.5) unstable; urgency=medium
 
   * Make hostkey_name argument required (because the fallback to $::fqdn
     actually does not work. 
 
- -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Mon, 13 Oct 2014 14:17:33 +0200
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Mon, 13 Oct 2014 14:18:49 +0200
 
 puppet-module-ssh (1.5.4.1) unstable; urgency=medium
 
