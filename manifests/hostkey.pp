@@ -1,6 +1,6 @@
 class ssh::hostkey (
     $manage_hostkey,
-    $hostkey_name = "${::fqdn}",
+    $hostkey_name,
     $hostaliases = undef,
 ) {
 
