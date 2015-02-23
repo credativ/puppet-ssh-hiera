@@ -7,6 +7,9 @@ define ssh::user(
     $groups=undef,
     $shell='/bin/bash',
     $pwhash='',
+    $password_min_age=undef,
+    $password_max_age=undef,
+    $expiry=undef,
     $username=$title,
     $managehome=true,
     $home='',
@@ -37,6 +40,9 @@ define ssh::user(
             gid         => $gid,
             groups      => $groups,
             shell       => $shell,
+            password_min_age  => $password_min_age,
+            password_max_age  => $password_max_age,
+            expiry      => $expiry,
             comment     => $comment,
             require     => [
                 Group[$username]
