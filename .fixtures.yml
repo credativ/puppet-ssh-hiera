@@ -1,0 +1,5 @@
+fixtures:
+  symlinks:
+    example42lib: "#{source_dir}/../puppet-example42lib"
+    stdlib: "#{source_dir}/../puppet-modules-puppetlabs/modules/stdlib"
+    ssh: "#{source_dir}"
