@@ -30,21 +30,21 @@ define ssh::user(
 
         # Create a usergroup
         group { $username:
-            ensure  => present,
-            gid     => $gid,
+            ensure => present,
+            gid    => $gid,
         }
 
         user { $username:
-            ensure      => present,
-            uid         => $uid,
-            gid         => $gid,
-            groups      => $groups,
-            shell       => $shell,
-            password_min_age  => $password_min_age,
-            password_max_age  => $password_max_age,
-            expiry      => $expiry,
-            comment     => $comment,
-            require     => [
+            ensure           => present,
+            uid              => $uid,
+            gid              => $gid,
+            groups           => $groups,
+            shell            => $shell,
+            password_min_age => $password_min_age,
+            password_max_age => $password_max_age,
+            expiry           => $expiry,
+            comment          => $comment,
+            require          => [
                 Group[$username]
             ],
         }
@@ -55,20 +55,20 @@ define ssh::user(
         }
 
         file { "/home/${username}":
-            ensure  => directory,
-            owner   => $username,
-            group   => $username,
-            mode    => '0700',
+            ensure => directory,
+            owner  => $username,
+            group  => $username,
+            mode   => '0700',
         }
 
         file { "/home/${username}/.ssh":
-            ensure  => directory,
-            owner   => $username,
-            group   => $username,
-            mode    => '0700',
+            ensure => directory,
+            owner  => $username,
+            group  => $username,
+            mode   => '0700',
         }
 
-        file { "/home/$username/.ssh/authorized_keys":
+        file { "/home/${username}/.ssh/authorized_keys":
             ensure  => present,
             owner   => $username,
             group   => $username,
@@ -88,15 +88,15 @@ define ssh::user(
 
         if $ssh_key {
             ssh_authorized_key { $ssh_key['comment']:
-                ensure  => present,
-                user    => $username,
-                type    => $ssh_key['type'],
-                key     => $ssh_key['key'],
+                ensure => present,
+                user   => $username,
+                type   => $ssh_key['type'],
+                key    => $ssh_key['key'],
             }
         }
 
         if $ssh_keys {
-            create_resources("ssh_authorized_key", $ssh_keys, $ssh_key_defaults)
+            create_resources('ssh_authorized_key', $ssh_keys, $ssh_key_defaults)
         }
     }
 }
