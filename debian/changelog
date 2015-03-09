@@ -1,3 +1,13 @@
+puppet-module-ssh (1.5.6) unstable; urgency=medium
+
+  [ Damian Lukowski ]
+  * Add password expiry options to ssh::users.
+
+  [ Patrick Schoenfeld ]
+  * Fix alignment of resources
+
+ -- Patrick Schoenfeld <patrick.schoenfeld@credativ.de>  Mon, 09 Mar 2015 10:12:49 +0100
+
 puppet-module-ssh (1.5.5) unstable; urgency=medium
 
   * Make hostkey_name argument required (because the fallback to $::fqdn
