@@ -67,6 +67,10 @@
 # [*groups*]
 #    A hash with the groups that shall be managed
 #
+# [*use_ldapuser*]
+#    Use ldapuser instead of internal user list
+#    Default: false
+#
 # == Author:
 # 
 #    Patrick Schoenfeld <patrick.schoenfeld@credativ.de>
@@ -87,7 +91,8 @@ class ssh (
     $users              = params_lookup('users'),
     $groups             = params_lookup('groups'),
     $service_name       = params_lookup('service_name'),
-    $options            = params_lookup('options')
+    $options            = params_lookup('options'),
+    $use_ldapuser       = params_lookup('use_ldapuser'),
 
     ) inherits ssh::params {
 
@@ -96,10 +101,18 @@ class ssh (
     }
 
     if $manage_users_allow {
-        if size(keys($users)) == 0 {
-            fail("Need users")
+        if $use_ldapuser {
+            if size(keys($users)) != 0 {
+                fail("Can't use both ldapuser and static user")
+            }
+            $options[AllowUsers] = keys($ldapuser::dataexport::data[passwd])
         }
-        $options[AllowUsers] = keys($users)
+        else {
+            if size(keys($users)) == 0 {
+                fail("Need users")
+            }
+            $options[AllowUsers] = keys($users)
+        }
     }
 
     file { '/etc/ssh/sshd_config':

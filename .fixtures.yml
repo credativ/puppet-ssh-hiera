@@ -1,5 +1,6 @@
 fixtures:
   symlinks:
     example42lib: "#{source_dir}/../puppet-example42lib"
+    ldapuser: "#{source_dir}/../puppet-ldapuser"
     stdlib: "#{source_dir}/../puppet-modules-puppetlabs/modules/stdlib"
     ssh: "#{source_dir}"

@@ -35,4 +35,28 @@ describe 'ssh' do
       }.to raise_error(Puppet::Error, /Need users/)
     }
   end
+
+  context "With manage_users_allow, with use_ldapuser" do
+    let(:pre_condition) {
+      <<-FIN
+class { ldapuser::dataexport:
+  data => {
+    'passwd' => {
+      'nobody' => {
+      }
+    }
+  }
+}
+FIN
+    }
+    let(:facts) { { :osfamily => 'Debian' } }
+    let(:params) { {
+      :manage_users_allow => true,
+      :use_ldapuser => true,
+    } }
+    it {
+      should contain_file('/etc/ssh/sshd_config')
+        .with_content(%r{^AllowUsers nobody$})
+    }
+  end
 end
