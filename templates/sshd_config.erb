@@ -93,3 +93,9 @@ Subsystem sftp /usr/lib/openssh/sftp-server
 # PAM authentication, then enable this but set PasswordAuthentication
 # and ChallengeResponseAuthentication to 'no'.
 UsePAM <%= options['UsePAM'] || 'yes' %>
+
+<% ['AllowUsers', 'AllowGroups', 'DenyUsers', 'DenyGroups'].each do |key| -%>
+<%   if options.has_key?(key) -%>
+<%= key %> <%= options[key].sort.join(' ') %>
+<%   end -%>
+<% end -%>
