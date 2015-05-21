@@ -48,6 +48,10 @@
 #    Wether to manage groups or not.
 #    Default: false
 #
+# [*manage_users_allow*]
+#    Wether to manage allowed users in sshd config or not.
+#    Default: false
+#
 # [*permit_root_login*]
 #    Wether to permit root login or not. This is a global option. If
 #    configuring it from hiera, make sure not to prefix it with the
@@ -75,6 +79,7 @@ class ssh (
     $listen_address     = params_lookup('listen_address'),
     $manage_known_hosts = params_lookup('manage_known_hosts'),
     $manage_users       = params_lookup('manage_users'),
+    $manage_users_allow = params_lookup('manage_users_allow'),
     $manage_groups      = params_lookup('manage_groups'),
     $manage_hostkey     = params_lookup('manage_hostkey'),
     $hostkey_name       = params_lookup('hostkey_name'),
@@ -88,6 +93,13 @@ class ssh (
 
     package { 'openssh-server':
         ensure => $ensure,
+    }
+
+    if $manage_users_allow {
+        if size(keys($users)) == 0 {
+            fail("Need users")
+        }
+        $options[AllowUsers] = keys($users)
     }
 
     file { '/etc/ssh/sshd_config':
