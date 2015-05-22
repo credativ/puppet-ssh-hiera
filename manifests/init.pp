@@ -89,6 +89,7 @@ class ssh (
     $hostkey_name       = params_lookup('hostkey_name'),
     $hostaliases        = params_lookup('hostaliases'),
     $users              = params_lookup('users'),
+    $users_default      = params_lookup('users_default'),
     $groups             = params_lookup('groups'),
     $service_name       = params_lookup('service_name'),
     $options            = params_lookup('options'),
@@ -140,8 +141,9 @@ class ssh (
         groups => $groups,
     } ~> # first groups, then users
     class { 'ssh::users':
-        manage => $manage_users,
-        users  => $users,
+        manage  => $manage_users,
+        users   => $users,
+        default => $users_default,
     }
 
     class { 'ssh::hostkey':

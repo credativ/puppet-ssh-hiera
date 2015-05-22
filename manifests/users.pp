@@ -1,10 +1,11 @@
 class ssh::users (
     $manage,
-    $users
+    $users,
+    $default,
     ) {
 
     if $manage {
-        create_resources(ssh::user, $users)
+        create_resources(ssh::user, $users, $default)
     }
 }
 
