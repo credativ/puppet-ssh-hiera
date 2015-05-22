@@ -13,6 +13,7 @@ define ssh::user(
     $username=$title,
     $managehome=true,
     $home='',
+    $home_mode='0700',
     $hosts=[],
     ) {
 
@@ -58,7 +59,7 @@ define ssh::user(
             ensure => directory,
             owner  => $username,
             group  => $username,
-            mode   => '0700',
+            mode   => $home_mode,
         }
 
         file { "/home/${username}/.ssh":
