@@ -11,6 +11,7 @@ class ssh::params {
     $hostaliases        = undef
 
     $users              = {}
+    $users_default      = {}
     $groups             = {}
 
     $options            = {}

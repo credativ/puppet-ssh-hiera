@@ -1,3 +1,18 @@
+puppet-module-ssh (1.5.7) unstable; urgency=medium
+
+  [ Bastian Blank ]
+  * Re-do test infrastructure
+  * Allow generation of Allow/DenyUsers/Groups
+  * Add parameter to manage UserAllow
+  * Extract users from ldapuser if requested
+  * Add defaults hash for users
+  * Make mode of home overridable
+
+  [ Arnd Hannemann ]
+  * create_resources(): third argument, if provided, must be a hash
+
+ -- Arnd Hannemann <arnd.hannemann@credativ.de>  Fri, 22 May 2015 16:37:08 +0200
+
 puppet-module-ssh (1.5.6) unstable; urgency=medium
 
   [ Damian Lukowski ]
