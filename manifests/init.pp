@@ -143,7 +143,7 @@ class ssh (
     class { 'ssh::users':
         manage  => $manage_users,
         users   => $users,
-        default => $users_default,
+        users_default => $users_default,
     }
 
     class { 'ssh::hostkey':
