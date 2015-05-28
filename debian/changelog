@@ -1,3 +1,9 @@
+puppet-module-ssh (1.5.8) unstable; urgency=medium
+
+  * default seems to be reserved in puppet 2.7
+
+ -- Arnd Hannemann <arnd.hannemann@credativ.de>  Thu, 28 May 2015 09:20:44 +0200
+
 puppet-module-ssh (1.5.7) unstable; urgency=medium
 
   [ Bastian Blank ]
