@@ -106,6 +106,7 @@ class ssh (
             if size(keys($users)) != 0 {
                 fail("Can't use both ldapuser and static user")
             }
+            include ldapuser::dataexport
             $options[AllowUsers] = keys($ldapuser::dataexport::data[passwd])
         }
         else {
