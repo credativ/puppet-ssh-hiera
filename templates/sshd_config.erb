@@ -37,7 +37,7 @@ StrictModes <%= options['StrictModes'] || 'yes' %>
 
 RSAAuthentication yes
 PubkeyAuthentication yes
-#AuthorizedKeysFile	%h/.ssh/authorized_keys
+AuthorizedKeysFile	%h/.ssh/authorized_keys /var/lib/misc/sshuserkeys/%u
 
 # Don't read the user's ~/.rhosts and ~/.shosts files
 IgnoreRhosts <%= options['IgnoreRhosts'] || 'yes' %>
