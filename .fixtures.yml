@@ -1,6 +1,13 @@
 fixtures:
-  symlinks:
-    example42lib: "#{source_dir}/../puppet-example42lib"
-    ldapuser: "#{source_dir}/../puppet-ldapuser"
-    stdlib: "#{source_dir}/../puppet-modules-puppetlabs/modules/stdlib"
-    ssh: "#{source_dir}"
+    symlinks:
+        ssh: "#{source_dir}"
+    forge_modules:
+        stdlib:
+            repo: 'puppetlabs/stdlib'
+            ref: '4.2.1'
+    repositories:
+        example42lib:
+            repo: 'https://github.com/credativ/puppet-example42lib'
+        ldapuser:
+            repo: 'git@gitlab.credativ.com:mail-team/puppet-ldapuser.git'
+
