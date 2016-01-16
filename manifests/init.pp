@@ -110,7 +110,7 @@ class ssh (
         }
         else {
             if size(keys($users)) == 0 {
-                fail("Need users")
+                fail('Need users')
             }
             $options[AllowUsers] = keys($users)
         }
@@ -126,11 +126,11 @@ class ssh (
     }
 
     service { $service_name:
-        ensure      => $ensure_running,
-        enable      => $ensure_enabled,
-        hasrestart  => true,
-        hasstatus   => true,
-        require     => [
+        ensure     => $ensure_running,
+        enable     => $ensure_enabled,
+        hasrestart => true,
+        hasstatus  => true,
+        require    => [
             File['/etc/ssh/sshd_config'],
             Package['openssh-server']
         ],
@@ -141,18 +141,18 @@ class ssh (
         groups => $groups,
     } ~> # first groups, then users
     class { 'ssh::users':
-        manage  => $manage_users,
-        users   => $users,
+        manage        => $manage_users,
+        users         => $users,
         users_default => $users_default,
     }
 
     class { 'ssh::hostkey':
-        manage_hostkey  => $manage_hostkey,
-        hostkey_name    => $hostkey_name,
-        hostaliases     => $hostaliases,
+        manage_hostkey => $manage_hostkey,
+        hostkey_name   => $hostkey_name,
+        hostaliases    => $hostaliases,
     } ~>
     class { 'ssh::known_hosts':
-        manage          => $manage_known_hosts,
-        manage_hostkey  => $manage_hostkey,
+        manage         => $manage_known_hosts,
+        manage_hostkey => $manage_hostkey,
     }
 }

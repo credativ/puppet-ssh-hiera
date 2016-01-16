@@ -1,9 +1,9 @@
 class ssh::known_hosts::storeconfig {
         # Export our own ssh key
         @@sshkey { $::hostname:
-            host_aliases    => [$::fqdn, $::ipaddress],
-            type            => rsa,
-            key             => $::sshrsakey
+            host_aliases => [$::fqdn, $::ipaddress],
+            type         => rsa,
+            key          => $::sshrsakey
         }
 
         Sshkey <<| |>>
