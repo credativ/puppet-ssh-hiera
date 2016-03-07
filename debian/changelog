@@ -1,3 +1,18 @@
+puppet-module-ssh (1.6.0) unstable; urgency=medium
+
+  [ Damian Lukowski ]
+  * Add MaxStartups option
+
+  [ Patrick Schoenfeld ]
+  * Let puppet-lint fix some stylistic problems
+
+  [ Damian Lukowski ]
+  * Set MaxStartups SSH option only if defined in hiera.
+
+  [ Patrick Schönfeld ]
+
+ -- Damian Lukowski <damian.lukowski@credativ.de>  Mon, 07 Mar 2016 16:03:45 +0100
+
 puppet-module-ssh (1.5.9) unstable; urgency=medium
 
   [ Patrick Schoenfeld ]
