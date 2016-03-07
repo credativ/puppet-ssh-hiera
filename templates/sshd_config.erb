@@ -75,7 +75,12 @@ PrintLastLog <%= options['PrintLastLog'] || 'yes' %>
 TCPKeepAlive <%= options['TCPKeepAlive'] || 'yes' %>
 #UseLogin no
 
+<% if options.has_key?('MaxStartups') -%>
+MaxStartups <%= options['MaxStartups'] %>
+<% else -%>
 #MaxStartups 10:30:60
+<% end -%>
+
 #Banner /etc/issue.net
 
 # Allow client to pass locale environment variables
