@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe 'ssh_keygen' do
     describe 'requires arguments' do
-        it { should run.with_params().and_raise_error("/request argument required/") }
+        it do
+            expect { is_expected.to raise_error(Puppet::ParseError) }
+        end
     end
 end
